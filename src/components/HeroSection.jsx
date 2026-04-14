@@ -35,6 +35,22 @@ function HeroSection() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Save to localStorage for admin inbox
+    const enquiry = {
+      id: Date.now().toString(),
+      name: formData.name,
+      phone: formData.phone,
+      interest: formData.interest,
+      email: '',
+      message: '',
+      date: new Date().toISOString(),
+      read: false,
+      source: 'hero-modal',
+    };
+    try {
+      const existing = JSON.parse(localStorage.getItem('wp_enquiries') || '[]');
+      localStorage.setItem('wp_enquiries', JSON.stringify([enquiry, ...existing]));
+    } catch {}
     setSubmitted(true);
     setTimeout(() => {
       setFormOpen(false);

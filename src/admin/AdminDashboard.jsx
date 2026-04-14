@@ -1,17 +1,21 @@
 import { useState } from 'react';
 import { useAdmin } from './AdminContext';
+import AdminOverview from './AdminOverview';
 import AdminProjects from './AdminProjects';
 import AdminSiteInfo from './AdminSiteInfo';
+import AdminEnquiries from './AdminEnquiries';
 import './Admin.css';
 
 const NAV = [
+  { id: 'overview', label: 'Overview', icon: '📊' },
+  { id: 'enquiries', label: 'Enquiries', icon: '📩' },
   { id: 'projects', label: 'Projects', icon: '🏗️' },
   { id: 'siteinfo', label: 'Site Info', icon: '⚙️' },
 ];
 
 export default function AdminDashboard() {
   const { logout, projects, siteInfo } = useAdmin();
-  const [active, setActive] = useState('projects');
+  const [active, setActive] = useState('overview');
 
   return (
     <div className="admin-layout">
@@ -26,16 +30,22 @@ export default function AdminDashboard() {
         </div>
 
         <nav className="admin-sidebar__nav">
-          {NAV.map(item => (
-            <button
-              key={item.id}
-              className={`admin-nav-item${active === item.id ? ' active' : ''}`}
-              onClick={() => setActive(item.id)}
-            >
-              <span className="admin-nav-item__icon">{item.icon}</span>
-              {item.label}
-            </button>
-          ))}
+          {NAV.map(item => {
+            const unread = item.id === 'enquiries'
+              ? (() => { try { return JSON.parse(localStorage.getItem('wp_enquiries') || '[]').filter(e => !e.read).length; } catch { return 0; } })()
+              : 0;
+            return (
+              <button
+                key={item.id}
+                className={`admin-nav-item${active === item.id ? ' active' : ''}`}
+                onClick={() => setActive(item.id)}
+              >
+                <span className="admin-nav-item__icon">{item.icon}</span>
+                {item.label}
+                {unread > 0 && <span className="admin-nav-badge">{unread}</span>}
+              </button>
+            );
+          })}
         </nav>
 
         <div className="admin-sidebar__stats">
@@ -71,6 +81,8 @@ export default function AdminDashboard() {
         </div>
 
         <div className="admin-content">
+          {active === 'overview' && <AdminOverview />}
+          {active === 'enquiries' && <AdminEnquiries />}
           {active === 'projects' && <AdminProjects />}
           {active === 'siteinfo' && <AdminSiteInfo />}
         </div>

@@ -7,6 +7,18 @@ export default function ContactSection() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Save to localStorage for admin inbox
+    const enquiry = {
+      id: Date.now().toString(),
+      ...form,
+      date: new Date().toISOString(),
+      read: false,
+      source: 'contact-form',
+    };
+    try {
+      const existing = JSON.parse(localStorage.getItem('wp_enquiries') || '[]');
+      localStorage.setItem('wp_enquiries', JSON.stringify([enquiry, ...existing]));
+    } catch {}
     setSubmitted(true);
   };
 
