@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="room" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#111111"/>
+      <stop offset="100%" style="stop-color:#1a1a1a"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#room)"/>
+  <!-- Floor perspective -->
+  <polygon points="0,600 800,600 650,350 150,350" fill="#0f0f0f"/>
+  <!-- Back wall -->
+  <rect x="150" y="100" width="500" height="250" fill="#111"/>
+  <!-- Large window -->
+  <rect x="280" y="130" width="240" height="180" fill="#1a1a1a"/>
+  <rect x="285" y="135" width="110" height="170" fill="#c9a84c" opacity="0.08"/>
+  <rect x="405" y="135" width="110" height="170" fill="#c9a84c" opacity="0.06"/>
+  <line x1="395" y1="135" x2="395" y2="305" stroke="#c9a84c" stroke-width="1" opacity="0.4"/>
+  <line x1="280" y1="220" x2="520" y2="220" stroke="#c9a84c" stroke-width="1" opacity="0.4"/>
+  <!-- Furniture silhouettes -->
+  <rect x="250" y="380" width="300" height="80" fill="#1a1a1a"/>
+  <rect x="220" y="360" width="360" height="30" fill="#222"/>
+  <!-- Side walls -->
+  <polygon points="0,0 150,100 150,350 0,600" fill="#0d0d0d"/>
+  <polygon points="800,0 650,100 650,350 800,600" fill="#0d0d0d"/>
+  <!-- Gold trim -->
+  <line x1="150" y1="100" x2="650" y2="100" stroke="#c9a84c" stroke-width="2" opacity="0.5"/>
+  <line x1="150" y1="350" x2="650" y2="350" stroke="#c9a84c" stroke-width="1" opacity="0.3"/>
+  <text x="400" y="70" font-family="Georgia, serif" font-size="28" fill="#c9a84c" text-anchor="middle">Villa Interior</text>
+  <text x="400" y="560" font-family="Arial, sans-serif" font-size="12" fill="#9ca3af" text-anchor="middle" letter-spacing="3">WINSTONE PROJECTS</text>
+</svg>

@@ -1,0 +1,104 @@
+.portfolio-card {
+  background: var(--color-surface);
+  overflow: hidden;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  border: 1px solid var(--color-border-subtle);
+  cursor: default;
+}
+
+.portfolio-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,76,0.15);
+}
+
+.portfolio-card__image-wrap {
+  position: relative;
+  width: 100%; height: 210px;
+  overflow: hidden;
+}
+
+.portfolio-card__image {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.portfolio-card:hover .portfolio-card__image { transform: scale(1.05); }
+
+.badge {
+  position: absolute;
+  top: 12px; left: 12px;
+  font-family: var(--font-body);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 2px;
+  z-index: 1;
+}
+
+.badge--completed { background: #14532d; color: #86efac; border: 1px solid rgba(134,239,172,0.18); }
+.badge--ongoing   { background: #78350f; color: #fcd34d; border: 1px solid rgba(252,211,77,0.18); }
+
+.portfolio-card__content { padding: 18px 20px 22px; }
+
+.portfolio-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.portfolio-card__type {
+  font-family: var(--font-body);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  background: rgba(201,168,76,0.07);
+  border: 1px solid rgba(201,168,76,0.13);
+  padding: 3px 9px;
+}
+
+.portfolio-card__year {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.portfolio-card__name {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: 5px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.portfolio-card__location {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 10px;
+}
+
+.portfolio-card__description {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  margin: 0;
+  font-weight: 300;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
