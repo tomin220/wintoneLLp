@@ -21,10 +21,10 @@ const TAGS = [
 ];
 
 function StatCounter({ target, label, sectionRef }) {
-  const count = useCounterAnimation(target, 2000, sectionRef);
+  const { count, done } = useCounterAnimation(target, 2000, sectionRef);
   return (
     <div className="founder__stat">
-      <span className="founder__stat-number">{count}+</span>
+      <span className={`founder__stat-number${done ? ' stat-pulse' : ''}`}>{count}+</span>
       <span className="founder__stat-label">{label}</span>
     </div>
   );

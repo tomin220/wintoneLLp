@@ -12,7 +12,7 @@ function AboutSection() {
       <div className="container">
         <div className="about__grid">
           {/* Text column */}
-          <div className="about__text">
+          <div className="about__text reveal reveal-left">
             <p className="section-label">Est. 2018 · BANGALORE'S PREMIER DEVELOPER · OUR STORY</p>
             <div className="gold-divider" />
             <h2 className="section-title">Crafting Premium Living Experiences in India</h2>
@@ -30,7 +30,7 @@ function AboutSection() {
           </div>
 
           {/* Image column */}
-          <div className="about__image-wrap">
+          <div className="about__image-wrap reveal reveal-right">
             <img
               src={ABOUT_IMG_PRIMARY}
               alt="Winstone Projects Bangalore development"

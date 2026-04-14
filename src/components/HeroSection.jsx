@@ -15,10 +15,10 @@ const stats = [
 ];
 
 function StatCounter({ target, label, suffix, sectionRef }) {
-  const count = useCounterAnimation(target, 2200, sectionRef);
+  const { count, done } = useCounterAnimation(target, 2200, sectionRef);
   return (
     <div className="hero__stat">
-      <span className="hero__stat-number">
+      <span className={`hero__stat-number${done ? ' stat-pulse' : ''}`}>
         {count}<span className="hero__stat-suffix">{suffix}</span>
       </span>
       <span className="hero__stat-label">{label}</span>

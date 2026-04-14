@@ -40,7 +40,7 @@ export default function WhyChooseSection() {
 
       {/* Items */}
       <div className="container">
-        <div className="why-choose-grid">
+        <div className="why-choose-grid reveal-stagger">
           {differentiators.map((item, i) => (
             <div key={item.title} className="why-item">
               <span className="why-item__num">{String(i + 1).padStart(2, '0')}</span>

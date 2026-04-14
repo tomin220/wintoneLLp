@@ -1,26 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 
-/**
- * Animates a counter from 0 to `target` when `triggerRef` enters the viewport.
- *
- * @param {number} target     - Final value to count up to
- * @param {number} duration   - Animation duration in ms (default 2000)
- * @param {React.RefObject}   triggerRef - Ref attached to the section container
- * @returns {number} count    - Current animated value (0 → target)
- */
 function useCounterAnimation(target, duration = 2000, triggerRef) {
-  // Treat negative targets as 0
   const effectiveTarget = target < 0 ? 0 : target;
-
   const [count, setCount] = useState(0);
+  const [done, setDone] = useState(false);
   const rafIdRef = useRef(null);
 
   useEffect(() => {
-    // Edge case: target is 0, no animation needed
-    if (effectiveTarget === 0) {
-      setCount(0);
-      return;
-    }
+    if (effectiveTarget === 0) { setCount(0); return; }
 
     const element = triggerRef?.current;
     if (!element) return;
@@ -36,6 +23,9 @@ function useCounterAnimation(target, duration = 2000, triggerRef) {
 
       if (progress < 1) {
         rafIdRef.current = requestAnimationFrame(animate);
+      } else {
+        setDone(true);
+        setTimeout(() => setDone(false), 700);
       }
     };
 
@@ -53,13 +43,11 @@ function useCounterAnimation(target, duration = 2000, triggerRef) {
 
     return () => {
       observer.disconnect();
-      if (rafIdRef.current !== null) {
-        cancelAnimationFrame(rafIdRef.current);
-      }
+      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
     };
   }, [effectiveTarget, duration, triggerRef]);
 
-  return count;
+  return { count, done };
 }
 
 export default useCounterAnimation;

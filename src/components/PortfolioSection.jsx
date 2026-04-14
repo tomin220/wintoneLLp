@@ -72,7 +72,7 @@ export default function PortfolioSection() {
           </p>
         </div>
 
-        <div className="portfolio-section__grid">
+        <div className="portfolio-section__grid reveal-stagger">
           {PORTFOLIO_ITEMS.map((item) => (
             <PortfolioCard key={item.name} {...item} />
           ))}

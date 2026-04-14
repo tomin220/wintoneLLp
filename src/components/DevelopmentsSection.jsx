@@ -17,7 +17,7 @@ export default function DevelopmentsSection() {
             Explore our curated collection of luxury developments across Bangalore and South India
           </p>
         </div>
-        <div className="developments-grid">
+        <div className="developments-grid reveal-stagger">
           {FEATURED_PROJECTS.map((project) => (
             <ProjectCard
               key={project.id}
