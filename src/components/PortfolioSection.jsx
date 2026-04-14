@@ -13,7 +13,7 @@ const PORTFOLIO_ITEMS = [
     description: 'A signature 5-BHK smart villa with private pool, home theatre, and lush 1-acre landscaped grounds.',
   },
   {
-    image: '/project_apartments.png',
+    image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80',
     name: 'The Residences',
     location: 'Koramangala',
     type: 'RESIDENTIAL',
@@ -22,7 +22,7 @@ const PORTFOLIO_ITEMS = [
     description: '42 premium 3 & 4 BHK apartments with sky lounge, infinity pool, and gym. Delivered on schedule.',
   },
   {
-    image: '/shoba images-D1yrtGv7.webp',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80',
     name: 'Winstone Greens Phase 1',
     location: 'Sarjapur',
     type: 'LAYOUT',
@@ -31,7 +31,7 @@ const PORTFOLIO_ITEMS = [
     description: '240 BMRDA-approved plots across 48 acres. Phase 1 fully sold out. Gated community with underground utilities.',
   },
   {
-    image: '/commercial.png',
+    image: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',
     name: 'Winston Square',
     location: 'Indiranagar',
     type: 'COMMERCIAL',
@@ -49,7 +49,7 @@ const PORTFOLIO_ITEMS = [
     description: 'Collection of 12 heritage-inspired villas with private gardens and club access, overlooking the Chamundi Hills.',
   },
   {
-    image: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80',
     name: 'Aero Valley Phase 1',
     location: 'Devanahalli',
     type: 'LAYOUT',
