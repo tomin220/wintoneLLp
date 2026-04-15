@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAdmin } from './AdminContext';
 import './Admin.css';
 
@@ -32,7 +33,6 @@ export default function AdminLogin() {
 
         <h1 className="admin-login__title">Sign In</h1>
         <p className="admin-login__hint">Use: admin / winstone2024</p>
-
         <form onSubmit={handleSubmit} className="admin-login__form">
           <div className="admin-field">
             <label htmlFor="al-user">Username</label>
@@ -61,6 +61,9 @@ export default function AdminLogin() {
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
+        <Link to="/" className="admin-login__back">
+          ← Back to Website
+        </Link>
       </div>
     </div>
   );

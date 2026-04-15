@@ -4,12 +4,14 @@ import AdminOverview from './AdminOverview';
 import AdminProjects from './AdminProjects';
 import AdminSiteInfo from './AdminSiteInfo';
 import AdminEnquiries from './AdminEnquiries';
+import AdminTestimonials from './AdminTestimonials';
 import './Admin.css';
 
 const NAV = [
   { id: 'overview', label: 'Overview', icon: '📊' },
   { id: 'enquiries', label: 'Enquiries', icon: '📩' },
   { id: 'projects', label: 'Projects', icon: '🏗️' },
+  { id: 'testimonials', label: 'Testimonials', icon: '💬' },
   { id: 'siteinfo', label: 'Site Info', icon: '⚙️' },
 ];
 
@@ -84,6 +86,7 @@ export default function AdminDashboard() {
           {active === 'overview' && <AdminOverview />}
           {active === 'enquiries' && <AdminEnquiries />}
           {active === 'projects' && <AdminProjects />}
+          {active === 'testimonials' && <AdminTestimonials />}
           {active === 'siteinfo' && <AdminSiteInfo />}
         </div>
       </main>

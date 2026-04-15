@@ -918,3 +918,78 @@
   min-width: 18px;
   text-align: center;
 }
+
+.admin-login__back {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--a-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.admin-login__back:hover { color: var(--a-gold); }
+
+/* ── Info banner ── */
+.admin-info-banner {
+  background: rgba(201,168,76,0.07);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 4px;
+  padding: 12px 16px;
+  font-size: 0.8125rem;
+  color: rgba(240,237,232,0.7);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.admin-info-banner strong { color: var(--a-gold); }
+
+/* ── Testimonials list ── */
+.testimonial-admin-list {
+  display: flex; flex-direction: column; gap: 14px;
+}
+
+.testimonial-admin-card {
+  background: var(--a-surface);
+  border: 1px solid var(--a-border);
+  border-radius: var(--a-radius);
+  padding: 20px 22px;
+}
+
+.testimonial-admin-card__quote {
+  font-size: 0.9rem;
+  color: rgba(240,237,232,0.7);
+  font-style: italic;
+  line-height: 1.7;
+  margin-bottom: 16px;
+  font-weight: 300;
+}
+
+.testimonial-admin-card__footer {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+
+.testimonial-admin-card__author {
+  display: flex; align-items: center; gap: 10px;
+}
+
+.testimonial-admin-card__avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--a-gold); color: #0a0a0a;
+  font-size: 0.85rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.testimonial-admin-card__name {
+  font-size: 0.875rem; font-weight: 600;
+  color: var(--a-text); margin: 0 0 2px;
+}
+
+.testimonial-admin-card__meta {
+  font-size: 0.75rem; color: var(--a-muted); margin: 0;
+}
+
+.admin-modal--wide { max-width: 560px; }
