@@ -1,14 +1,13 @@
 import { useRef } from 'react';
-import useCounterAnimation from '../hooks/useCounterAnimation';
 import './FounderSection.css';
 
 const PLACEHOLDER_SVG =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='800' viewBox='0 0 600 800'%3E%3Crect width='600' height='800' fill='%231a1a1a'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Georgia,serif' font-size='18' fill='%23c9a84c'%3ENayaz Faiyaz Ahmed, Founder %26 Chairman%3C/text%3E%3C/svg%3E";
 
-const STATS = [
-  { target: 7, label: 'Years of Excellence' },
-  { target: 12, label: 'Projects Completed' },
-  { target: 500, label: 'Lives Impacted' },
+const MILESTONES = [
+  { icon: '✦', label: 'Est. 2018', sub: 'Founded in Bangalore' },
+  { icon: '◈', label: 'RERA Compliant', sub: 'All Projects Registered' },
+  { icon: '❖', label: 'Client First', sub: 'Transparent Process' },
 ];
 
 const TAGS = [
@@ -16,8 +15,8 @@ const TAGS = [
   'Design-Driven Architecture',
   'Technology Integration',
   'Premium Development',
-  'Pan-India Expansion',
-  'Award-Winning Projects',
+  'Vastu Compliant Homes',
+  'Award-Winning Design',
 ];
 
 function StatCounter({ target, label, sectionRef }) {
@@ -62,21 +61,24 @@ function FounderSection() {
               meaningful impact."
             </blockquote>
 
-            {/* Stats */}
+            {/* Milestones — replacing number stats */}
             <div className="founder__stats">
-              {STATS.map((s) => (
-                <StatCounter key={s.label} target={s.target} label={s.label} sectionRef={sectionRef} />
+              {MILESTONES.map((m) => (
+                <div key={m.label} className="founder__stat">
+                  <span className="founder__stat-icon">{m.icon}</span>
+                  <span className="founder__stat-number">{m.label}</span>
+                  <span className="founder__stat-label">{m.sub}</span>
+                </div>
               ))}
             </div>
 
             {/* Bio */}
             <p className="founder__bio">
-              A visionary entrepreneur with a passion for transforming India's urban landscape.
-              Since founding Winstone Projects in 2018, Nayaz has led the development of iconic
-              residential and commercial properties across Bangalore, Mysore, and Hyderabad. His
-              relentless pursuit of excellence, combined with deep respect for Indian architectural
-              heritage, has positioned Winstone Projects as a leading name in India's premium real
-              estate sector.
+              A visionary entrepreneur with a passion for transforming Bangalore's urban landscape.
+              Since founding Winstone Projects in 2018, Nayaz has led the development of premium
+              residential and commercial properties across Bangalore. His relentless pursuit of
+              excellence, combined with deep respect for Indian architectural heritage, has
+              positioned Winstone Projects as a trusted name in Bangalore's luxury real estate sector.
             </p>
 
             {/* Leadership tags */}

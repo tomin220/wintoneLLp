@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useCounterAnimation from '../hooks/useCounterAnimation';
 import { saveEnquiry } from '../lib/enquiryService';
 import './HeroSection.css';
 
@@ -8,24 +7,13 @@ const scrollToSection = (id) => {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 };
 
-const stats = [
-  { target: 12, label: 'Projects', suffix: '+' },
-  { target: 500, label: 'Families', suffix: '+' },
-  { target: 200, label: 'Acres', suffix: '+' },
-  { target: 7, label: 'Years', suffix: '' },
+// Replace animated number counters with quality badges
+const BADGES = [
+  { icon: '✦', label: 'RERA Registered', sub: 'Fully Compliant' },
+  { icon: '◈', label: 'Est. 2018', sub: 'Bangalore Based' },
+  { icon: '❖', label: 'Premium Quality', sub: 'Luxury Finishes' },
+  { icon: '◇', label: 'Client First', sub: 'Trusted Developer' },
 ];
-
-function StatCounter({ target, label, suffix, sectionRef }) {
-  const { count, done } = useCounterAnimation(target, 2200, sectionRef);
-  return (
-    <div className="hero__stat">
-      <span className={`hero__stat-number${done ? ' stat-pulse' : ''}`}>
-        {count}<span className="hero__stat-suffix">{suffix}</span>
-      </span>
-      <span className="hero__stat-label">{label}</span>
-    </div>
-  );
-}
 
 function HeroSection() {
   const sectionRef = useRef(null);
@@ -96,16 +84,14 @@ function HeroSection() {
           </button>
         </div>
 
-        {/* Stats */}
+        {/* Badges — replacing number stats */}
         <div className="hero__stats">
-          {stats.map((stat) => (
-            <StatCounter
-              key={stat.label}
-              target={stat.target}
-              label={stat.label}
-              suffix={stat.suffix}
-              sectionRef={sectionRef}
-            />
+          {BADGES.map((b) => (
+            <div key={b.label} className="hero__stat">
+              <span className="hero__stat-icon">{b.icon}</span>
+              <span className="hero__stat-number">{b.label}</span>
+              <span className="hero__stat-label">{b.sub}</span>
+            </div>
           ))}
         </div>
       </div>

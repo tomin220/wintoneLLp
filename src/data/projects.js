@@ -24,9 +24,9 @@ export const PROJECTS = [
     description:
       'Architecturally stunning independent villas nestled in the heart of Whitefield. Featuring contemporary Indian architecture with premium finishes and smart-home technology.',
     fullDescription:
-      'Winstone Arcadia Villas is a collection of 18 signature independent villas set across 12 acres of lush landscaped grounds in Whitefield, Bangalore\'s most sought-after tech corridor. Each villa is a masterpiece of contemporary Indian architecture — blending clean modernist lines with traditional courtyard sensibilities. Smart-home automation, private pools, home theatres, and curated landscaping come standard. Vastu-compliant layouts, premium Italian marble, and bespoke joinery define every interior.',
+      'Winstone Arcadia Villas is a collection of signature independent villas set across lush landscaped grounds in Whitefield, Bangalore\'s most sought-after tech corridor. Each villa is a masterpiece of contemporary Indian architecture — blending clean modernist lines with traditional courtyard sensibilities. Smart-home automation, private pools, home theatres, and curated landscaping come standard. Vastu-compliant layouts, premium Italian marble, and bespoke joinery define every interior.',
     highlights: [
-      '18 independent villas across 12 acres',
+      'Independent villas across landscaped grounds',
       'Private pool & home theatre in every villa',
       'Smart-home automation (Alexa / Google)',
       'Vastu-compliant layouts',
@@ -35,9 +35,7 @@ export const PROJECTS = [
     ],
     specs: {
       'Configuration': '4 & 5 BHK',
-      'Plot Size': '3,600 – 6,000 sq ft',
-      'Built-up Area': '4,200 – 7,500 sq ft',
-      'Price Range': '₹4.5 Cr – ₹9 Cr',
+      'Plot Size': 'Multiple options available',
       'Possession': 'Ready to Move',
     },
     featured: true,
@@ -62,10 +60,10 @@ export const PROJECTS = [
     description:
       'Premium high-rise residences in the vibrant Koramangala neighbourhood. Thoughtfully designed apartments with premium amenities and stunning city views.',
     fullDescription:
-      'The Residences at Koramangala is a 22-floor luxury high-rise offering 42 premium 3 & 4 BHK apartments in Bangalore\'s most vibrant neighbourhood. A sky lounge on the 20th floor, infinity pool, fully-equipped gym, and concierge services redefine urban living. Floor-to-ceiling glazing, open-plan layouts, and premium European fittings create homes that are as functional as they are beautiful.',
+      'The Residences at Koramangala is a luxury high-rise offering premium 3 & 4 BHK apartments in Bangalore\'s most vibrant neighbourhood. A sky lounge, infinity pool, fully-equipped gym, and concierge services redefine urban living. Floor-to-ceiling glazing, open-plan layouts, and premium European fittings create homes that are as functional as they are beautiful.',
     highlights: [
-      '42 premium 3 & 4 BHK apartments',
-      'Sky lounge on 20th floor',
+      'Premium 3 & 4 BHK apartments',
+      'Sky lounge with panoramic city views',
       'Infinity pool & fully-equipped gym',
       '24/7 concierge & security',
       'Floor-to-ceiling glazing',
@@ -73,9 +71,6 @@ export const PROJECTS = [
     ],
     specs: {
       'Configuration': '3 & 4 BHK',
-      'Floor': '22 floors',
-      'Built-up Area': '1,800 – 3,200 sq ft',
-      'Price Range': '₹2.2 Cr – ₹4.8 Cr',
       'Possession': 'Ready to Move',
     },
     featured: true,
@@ -98,22 +93,20 @@ export const PROJECTS = [
     ],
     tagline: 'A Community Built for Life',
     description:
-      'An integrated township spanning 120 acres along the Sarjapur corridor. Villas, plots, clubhouse, and commercial spaces in a self-sufficient community.',
+      'An integrated township along the Sarjapur corridor. Villas, plots, clubhouse, and commercial spaces in a self-sufficient community.',
     fullDescription:
-      'Winstone Greens Township is a 120-acre integrated self-sufficient community along the high-growth Sarjapur corridor. Phase 1 delivered 240 BMRDA-approved plots, a 25,000 sq ft clubhouse, underground utilities, and a commercial high street. The township blends green open spaces, walking trails, and community amenities with excellent connectivity to Whitefield, Electronic City, and the Outer Ring Road.',
+      'Winstone Greens Township is an integrated self-sufficient community along the high-growth Sarjapur corridor. BMRDA-approved plots, a large clubhouse, underground utilities, and a commercial high street form the backbone of this township. Green open spaces, walking trails, and community amenities combine with excellent connectivity to Whitefield, Electronic City, and the Outer Ring Road.',
     highlights: [
-      '120 acres of integrated township',
-      '240 BMRDA-approved plots (Phase 1)',
-      '25,000 sq ft clubhouse',
+      'BMRDA-approved plotted development',
+      'Large clubhouse & community amenities',
       'Underground utilities throughout',
       'Commercial high street',
       'Gated community with 24/7 security',
+      'Excellent connectivity to ORR & Whitefield',
     ],
     specs: {
-      'Plot Sizes': '1,200 – 4,000 sq ft',
-      'Total Phases': '3 phases',
-      'Clubhouse': '25,000 sq ft',
-      'Price Range': '₹45 L – ₹1.8 Cr',
+      'Plot Sizes': 'Multiple options available',
+      'Approval': 'BMRDA Approved',
       'Possession': 'Phase 1 Delivered',
     },
     featured: true,
@@ -133,23 +126,21 @@ export const PROJECTS = [
     gallery: ['/commercial.png', '/project_villa_interior.png'],
     tagline: 'Grade-A Spaces for Modern Business',
     description:
-      'Grade-A 6-floor commercial complex, LEED-certified. Home to 15 corporates, with flexible floor plates.',
+      'Grade-A commercial complex, LEED-certified, with flexible floor plates designed for modern businesses.',
     fullDescription:
-      'Winston Square is a LEED Gold-certified Grade-A commercial complex in the heart of Indiranagar. Six floors of flexible floor plates accommodate 15 corporate tenants across 1,20,000 sq ft of premium office and retail space. High-speed elevators, 100% power backup, EV charging stations, and a rooftop café make it one of Bangalore\'s most sought-after business addresses.',
+      'Winston Square is a LEED Gold-certified Grade-A commercial complex in the heart of Indiranagar. Multiple floors of flexible floor plates accommodate corporate tenants across premium office and retail space. High-speed elevators, 100% power backup, EV charging stations, and a rooftop café make it one of Bangalore\'s most sought-after business addresses.',
     highlights: [
       'LEED Gold certified',
-      '1,20,000 sq ft of Grade-A space',
-      '15 corporate tenants',
+      'Grade-A office & retail space',
+      'Flexible floor plates for corporates',
       '100% power backup',
       'EV charging stations',
       'Rooftop café & sky deck',
     ],
     specs: {
-      'Total Area': '1,20,000 sq ft',
-      'Floors': '6 floors + basement',
       'Certification': 'LEED Gold',
-      'Lease Range': '₹85 – ₹120 / sq ft / month',
-      'Occupancy': '100%',
+      'Floors': 'Multi-floor complex',
+      'Possession': 'Ready',
     },
     featured: false,
   },
@@ -171,11 +162,11 @@ export const PROJECTS = [
     ],
     tagline: 'Heritage Reimagined',
     description:
-      'Collection of 12 heritage-inspired villas with private gardens and club access, overlooking the Chamundi Hills.',
+      'Heritage-inspired villas with private gardens and club access, overlooking the Chamundi Hills.',
     fullDescription:
-      'Heritage Palms is an exclusive collection of 12 heritage-inspired villas perched on the slopes of Chamundi Hills, Mysore. Drawing from the grandeur of Mysore\'s royal architecture, each villa features arched verandahs, hand-carved stone detailing, and private gardens. A shared clubhouse, infinity pool, and spa complete this one-of-a-kind retreat that blends old-world charm with contemporary luxury.',
+      'Heritage Palms is an exclusive collection of heritage-inspired villas perched on the slopes of Chamundi Hills, Mysore. Drawing from the grandeur of Mysore\'s royal architecture, each villa features arched verandahs, hand-carved stone detailing, and private gardens. A shared clubhouse, infinity pool, and spa complete this one-of-a-kind retreat that blends old-world charm with contemporary luxury.',
     highlights: [
-      '12 exclusive heritage-inspired villas',
+      'Heritage-inspired independent villas',
       'Private gardens with panoramic hill views',
       'Shared clubhouse, pool & spa',
       'Hand-carved stone detailing',
@@ -184,9 +175,6 @@ export const PROJECTS = [
     ],
     specs: {
       'Configuration': '4 & 5 BHK',
-      'Plot Size': '5,000 – 8,000 sq ft',
-      'Built-up Area': '5,500 – 9,000 sq ft',
-      'Price Range': '₹6 Cr – ₹14 Cr',
       'Possession': 'Dec 2025',
     },
     featured: false,
@@ -209,22 +197,20 @@ export const PROJECTS = [
     ],
     tagline: 'Invest Near the Future',
     description:
-      'Premium plotted development near Kempegowda International Airport. 180 plots, BMRDA approved.',
+      'Premium plotted development near Kempegowda International Airport. BMRDA approved.',
     fullDescription:
-      'Aero Valley Phase 1 is a premium BMRDA-approved plotted development located just 4 km from Kempegowda International Airport, Devanahalli — one of Bangalore\'s fastest-appreciating micro-markets. 180 plots across 36 acres with wide internal roads, underground utilities, a central park, and a gated entrance. Ideal for end-use or investment, with strong rental demand from airport and aerospace corridor professionals.',
+      'Aero Valley Phase 1 is a premium BMRDA-approved plotted development located near Kempegowda International Airport, Devanahalli — one of Bangalore\'s fastest-appreciating micro-markets. Wide internal roads, underground utilities, a central park, and a gated entrance make this an ideal choice for end-use or investment, with strong demand from airport and aerospace corridor professionals.',
     highlights: [
-      '180 BMRDA-approved plots',
-      '36 acres with wide internal roads',
-      '4 km from KIA Airport',
+      'BMRDA-approved plotted development',
+      'Near Kempegowda International Airport',
+      'Wide internal roads',
       'Underground utilities',
       'Central park & landscaping',
       'Gated community',
     ],
     specs: {
-      'Plot Sizes': '1,500 – 3,600 sq ft',
-      'Total Plots': '180',
+      'Plot Sizes': 'Multiple options available',
       'Approval': 'BMRDA',
-      'Price Range': '₹55 L – ₹1.4 Cr',
       'Possession': 'Mar 2025',
     },
     featured: false,

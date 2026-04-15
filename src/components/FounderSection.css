@@ -97,10 +97,11 @@
 .founder__stat {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
   padding-right: 32px;
   margin-right: 32px;
   border-right: 1px solid var(--color-border);
+  align-items: flex-start;
 }
 
 .founder__stat:last-child {
@@ -109,19 +110,27 @@
   margin-right: 0;
 }
 
-.founder__stat-number {
-  font-family: var(--font-heading);
-  font-size: 1.7rem;
-  font-weight: 600;
+.founder__stat-icon {
+  font-size: 1rem;
   color: var(--color-gold);
   line-height: 1;
+}
+
+.founder__stat-number {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  line-height: 1.2;
 }
 
 .founder__stat-label {
   font-family: var(--font-body);
   font-size: 9.5px;
-  font-weight: 600;
-  letter-spacing: 2px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--color-text-muted);
 }

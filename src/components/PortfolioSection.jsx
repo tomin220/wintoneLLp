@@ -10,7 +10,7 @@ const PORTFOLIO_ITEMS = [
     type: 'VILLA',
     status: 'COMPLETED',
     year: '2023',
-    description: 'A signature 5-BHK smart villa with private pool, home theatre, and lush 1-acre landscaped grounds.',
+    description: 'A signature smart villa with private pool, home theatre, and lush landscaped grounds.',
   },
   {
     image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80',
@@ -19,7 +19,7 @@ const PORTFOLIO_ITEMS = [
     type: 'RESIDENTIAL',
     status: 'COMPLETED',
     year: '2023',
-    description: '42 premium 3 & 4 BHK apartments with sky lounge, infinity pool, and gym. Delivered on schedule.',
+    description: 'Premium 3 & 4 BHK apartments with sky lounge, infinity pool, and gym. Delivered on schedule.',
   },
   {
     image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80',
@@ -28,7 +28,7 @@ const PORTFOLIO_ITEMS = [
     type: 'LAYOUT',
     status: 'COMPLETED',
     year: '2022',
-    description: '240 BMRDA-approved plots across 48 acres. Phase 1 fully sold out. Gated community with underground utilities.',
+    description: 'BMRDA-approved plotted development. Phase 1 fully sold out. Gated community with underground utilities.',
   },
   {
     image: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',
@@ -37,7 +37,7 @@ const PORTFOLIO_ITEMS = [
     type: 'COMMERCIAL',
     status: 'COMPLETED',
     year: '2022',
-    description: 'Grade-A 6-floor commercial complex, LEED-certified. Home to 15 corporates, with flexible floor plates.',
+    description: 'LEED Gold-certified Grade-A commercial complex with flexible floor plates for modern businesses.',
   },
   {
     image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80',

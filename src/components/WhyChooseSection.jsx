@@ -22,8 +22,8 @@ const differentiators = [
     description: 'End-to-end support from site selection to handover, with full legal transparency and RERA compliance.',
   },
   {
-    title: 'Pan-India Expansion',
-    description: "Growing presence across Bangalore, Mysore, and Hyderabad — bringing premium living to India's top cities.",
+    title: 'Bangalore-Focused Expertise',
+    description: 'Deep roots in Bangalore\'s premium real estate market — understanding every micro-market, regulation, and opportunity the city has to offer.',
   },
 ];
 

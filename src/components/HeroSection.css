@@ -168,47 +168,56 @@
   background: rgba(255,255,255,0.07);
 }
 
-/* Stats */
+/* Stats / Badges */
 .hero__stats {
   display: flex;
   padding-top: 36px;
   border-top: 1px solid rgba(255,255,255,0.07);
   width: 100%;
   justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
 }
 
 .hero__stat {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
-  padding: 0 32px;
+  gap: 4px;
+  padding: 0 28px;
   border-right: 1px solid rgba(255,255,255,0.07);
 }
 
 .hero__stat:last-child { border-right: none; }
 
-.hero__stat-number {
-  font-family: var(--font-heading);
-  font-size: 1.9rem;
-  font-weight: 600;
-  color: #fff;
+.hero__stat-icon {
+  font-size: 1.1rem;
+  color: var(--color-gold);
   line-height: 1;
-  letter-spacing: -0.02em;
+  margin-bottom: 2px;
 }
 
-.hero__stat-suffix {
-  font-size: 1.2rem;
-  color: var(--color-gold);
+.hero__stat-number {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
+
+.hero__stat-suffix { display: none; }
 
 .hero__stat-label {
   font-family: var(--font-body);
-  font-size: 8.5px;
-  font-weight: 700;
-  letter-spacing: 3px;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.35);
+  white-space: nowrap;
 }
 
 /* Floating card */
