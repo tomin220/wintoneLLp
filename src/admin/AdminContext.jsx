@@ -1,15 +1,15 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { PROJECTS as DEFAULT_PROJECTS } from '../data/projects';
 
 const AdminContext = createContext(null);
 
-const STORAGE_KEYS = {
+export const STORAGE_KEYS = {
   projects: 'wp_admin_projects',
   siteInfo: 'wp_admin_siteinfo',
   auth: 'wp_admin_auth',
 };
 
-const DEFAULT_SITE_INFO = {
+export const DEFAULT_SITE_INFO = {
   companyName: 'Winstone Projects',
   tagline: 'Redefining luxury living in Bangalore since 2018.',
   phone: '+91 98450 12345',
@@ -23,37 +23,58 @@ const DEFAULT_SITE_INFO = {
   heroSubtext: 'Premium villas and developments crafted for modern Indian lifestyles — built with trust, delivered with excellence.',
   founderName: 'Nayaz Faiyaz Ahmed',
   founderTitle: 'Founder & Chairman · Winstone Group',
-  founderBio: "A visionary entrepreneur with a passion for transforming India's urban landscape. Since founding Winstone Projects in 2018, Nayaz has led the development of iconic residential and commercial properties across Bangalore, Mysore, and Hyderabad.",
+  founderBio: 'A visionary entrepreneur with a passion for transforming Bangalore\'s urban landscape. Since founding Winstone Projects in 2018, Nayaz has led the development of premium residential and commercial properties across Bangalore. His relentless pursuit of excellence, combined with deep respect for Indian architectural heritage, has positioned Winstone Projects as a trusted name in Bangalore\'s luxury real estate sector.',
 };
 
 const ADMIN_CREDENTIALS = { username: 'admin', password: 'winstone2024' };
 
+function readProjects() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEYS.projects);
+    return stored ? JSON.parse(stored) : DEFAULT_PROJECTS;
+  } catch { return DEFAULT_PROJECTS; }
+}
+
+function readSiteInfo() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEYS.siteInfo);
+    return stored ? { ...DEFAULT_SITE_INFO, ...JSON.parse(stored) } : DEFAULT_SITE_INFO;
+  } catch { return DEFAULT_SITE_INFO; }
+}
+
+// Dispatch a custom event so same-tab listeners pick up changes
+function notifyChange(key) {
+  window.dispatchEvent(new StorageEvent('storage', { key }));
+}
+
 export function AdminProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem(STORAGE_KEYS.auth) === 'true';
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    () => localStorage.getItem(STORAGE_KEYS.auth) === 'true'
+  );
+  const [projects, setProjects] = useState(readProjects);
+  const [siteInfo, setSiteInfo] = useState(readSiteInfo);
 
-  const [projects, setProjects] = useState(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEYS.projects);
-      return stored ? JSON.parse(stored) : DEFAULT_PROJECTS;
-    } catch { return DEFAULT_PROJECTS; }
-  });
-
-  const [siteInfo, setSiteInfo] = useState(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEYS.siteInfo);
-      return stored ? { ...DEFAULT_SITE_INFO, ...JSON.parse(stored) } : DEFAULT_SITE_INFO;
-    } catch { return DEFAULT_SITE_INFO; }
-  });
-
+  // Listen for storage changes (cross-tab AND same-tab via notifyChange)
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(projects));
-  }, [projects]);
+    const onStorage = (e) => {
+      if (e.key === STORAGE_KEYS.projects) setProjects(readProjects());
+      if (e.key === STORAGE_KEYS.siteInfo) setSiteInfo(readSiteInfo());
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
 
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.siteInfo, JSON.stringify(siteInfo));
-  }, [siteInfo]);
+  // Persist projects and notify
+  const persistProjects = useCallback((updated) => {
+    localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(updated));
+    notifyChange(STORAGE_KEYS.projects);
+  }, []);
+
+  // Persist siteInfo and notify
+  const persistSiteInfo = useCallback((updated) => {
+    localStorage.setItem(STORAGE_KEYS.siteInfo, JSON.stringify(updated));
+    notifyChange(STORAGE_KEYS.siteInfo);
+  }, []);
 
   const login = (username, password) => {
     if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
@@ -77,25 +98,34 @@ export function AdminProvider({ children }) {
       slug,
       gallery: project.image ? [project.image] : [],
     };
-    setProjects(prev => [...prev, newProject]);
+    const updated = [...projects, newProject];
+    setProjects(updated);
+    persistProjects(updated);
     return newProject;
   };
 
   const updateProject = (id, updates) => {
-    setProjects(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
+    const updated = projects.map(p => p.id === id ? { ...p, ...updates } : p);
+    setProjects(updated);
+    persistProjects(updated);
   };
 
   const deleteProject = (id) => {
-    setProjects(prev => prev.filter(p => p.id !== id));
+    const updated = projects.filter(p => p.id !== id);
+    setProjects(updated);
+    persistProjects(updated);
   };
 
   const updateSiteInfo = (updates) => {
-    setSiteInfo(prev => ({ ...prev, ...updates }));
+    const updated = { ...siteInfo, ...updates };
+    setSiteInfo(updated);
+    persistSiteInfo(updated);
   };
 
   const resetProjects = () => {
     setProjects(DEFAULT_PROJECTS);
     localStorage.removeItem(STORAGE_KEYS.projects);
+    notifyChange(STORAGE_KEYS.projects);
   };
 
   return (
