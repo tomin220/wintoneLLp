@@ -54,11 +54,21 @@ export function AdminProvider({ children }) {
   const [projects, setProjects] = useState(readProjects);
   const [siteInfo, setSiteInfo] = useState(readSiteInfo);
 
+  // Re-read from localStorage on every focus (handles tab switching and navigation)
+  useEffect(() => {
+    const onFocus = () => {
+      setProjects(readProjects());
+      setSiteInfo(readSiteInfo());
+    };
+    window.addEventListener('focus', onFocus);
+    return () => window.removeEventListener('focus', onFocus);
+  }, []);
+
   // Listen for storage changes (cross-tab AND same-tab via notifyChange)
   useEffect(() => {
     const onStorage = (e) => {
-      if (e.key === STORAGE_KEYS.projects) setProjects(readProjects());
-      if (e.key === STORAGE_KEYS.siteInfo) setSiteInfo(readSiteInfo());
+      if (!e.key || e.key === STORAGE_KEYS.projects) setProjects(readProjects());
+      if (!e.key || e.key === STORAGE_KEYS.siteInfo) setSiteInfo(readSiteInfo());
     };
     window.addEventListener('storage', onStorage);
     return () => window.removeEventListener('storage', onStorage);

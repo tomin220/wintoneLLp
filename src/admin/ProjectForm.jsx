@@ -67,7 +67,7 @@ export default function ProjectForm({ project, onBack }) {
       addProject(cleaned);
     }
     setSaved(true);
-    setTimeout(() => { setSaved(false); onBack(); }, 1200);
+    setTimeout(() => { setSaved(false); onBack(); }, 800);
   };
 
   return (
@@ -205,9 +205,14 @@ export default function ProjectForm({ project, onBack }) {
         <div className="admin-form-footer">
           <button type="button" className="admin-btn admin-btn--ghost" onClick={onBack}>Cancel</button>
           <button type="submit" className={`admin-btn admin-btn--primary${saved ? ' admin-btn--saved' : ''}`}>
-            {saved ? '✓ Saved!' : isEdit ? 'Save Changes' : 'Create Project'}
+            {saved ? '✓ Saved! Redirecting...' : isEdit ? 'Save Changes' : 'Create Project'}
           </button>
         </div>
+        {saved && (
+          <p style={{ textAlign: 'center', fontSize: '0.8rem', color: 'rgba(201,168,76,0.8)', marginTop: 8 }}>
+            Changes saved to storage. Navigate to the website to see updates.
+          </p>
+        )}
       </form>
     </div>
   );

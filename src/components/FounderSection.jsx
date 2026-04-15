@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { useAdmin } from '../admin/AdminContext';
+import { useLiveSiteInfo } from '../hooks/useLiveData';
 import './FounderSection.css';
 
 const MILESTONES = [
@@ -19,7 +19,7 @@ const TAGS = [
 
 function FounderSection() {
   const sectionRef = useRef(null);
-  const { siteInfo } = useAdmin();
+  const siteInfo = useLiveSiteInfo();
 
   return (
     <section id="founder" className="founder" ref={sectionRef}>

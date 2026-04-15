@@ -1,4 +1,5 @@
 import { useAdmin } from '../admin/AdminContext';
+import { useLiveProjects, useLiveSiteInfo } from '../hooks/useLiveData';
 import './Footer.css';
 
 const QUICK_LINKS = [
@@ -15,7 +16,10 @@ const scrollToSection = (id) => {
 };
 
 export default function Footer() {
-  const { siteInfo, projects } = useAdmin();
+  const { siteInfo: adminSiteInfo, projects: adminProjects } = useAdmin();
+  // Read directly from localStorage for guaranteed freshness
+  const siteInfo = useLiveSiteInfo();
+  const projects = useLiveProjects();
 
   const SOCIAL_LINKS = [
     { label: 'Instagram', icon: 'IG', href: siteInfo.instagram },

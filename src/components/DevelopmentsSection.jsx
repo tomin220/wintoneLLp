@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import ProjectCard from './ProjectCard';
-import { useAdmin } from '../admin/AdminContext';
+import { useLiveProjects } from '../hooks/useLiveData';
 import './DevelopmentsSection.css';
 
 export default function DevelopmentsSection() {
   const navigate = useNavigate();
-  const { projects } = useAdmin();
+  const projects = useLiveProjects();
   const featured = projects.filter(p => p.featured);
 
   return (

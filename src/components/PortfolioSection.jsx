@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import PortfolioCard from './PortfolioCard';
-import { useAdmin } from '../admin/AdminContext';
+import { useLiveProjects } from '../hooks/useLiveData';
 import './PortfolioSection.css';
 
 export default function PortfolioSection() {
   const navigate = useNavigate();
-  const { projects } = useAdmin();
+  const projects = useLiveProjects();
 
   return (
     <section id="portfolio" className="portfolio-section">

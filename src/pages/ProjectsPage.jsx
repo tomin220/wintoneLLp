@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAdmin } from '../admin/AdminContext';
+import { useLiveProjects } from '../hooks/useLiveData';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import './ProjectsPage.css';
@@ -10,7 +10,7 @@ const CATEGORIES = ['All', 'Villa', 'Residential', 'Township', 'Commercial', 'La
 export default function ProjectsPage() {
   const [active, setActive] = useState('All');
   const navigate = useNavigate();
-  const { projects } = useAdmin();
+  const projects = useLiveProjects();
 
   const filtered = active === 'All'
     ? projects

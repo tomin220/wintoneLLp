@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useAdmin } from '../admin/AdminContext';
+import { useLiveProjects } from '../hooks/useLiveData';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import './ProjectDetailPage.css';
@@ -7,7 +7,7 @@ import './ProjectDetailPage.css';
 export default function ProjectDetailPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const { projects } = useAdmin();
+  const projects = useLiveProjects();
   const project = projects.find(p => p.slug === slug);
   const related = projects.filter(p => p.id !== project?.id && p.category === project?.category).slice(0, 3);
 

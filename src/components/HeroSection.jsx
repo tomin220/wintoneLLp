@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAdmin } from '../admin/AdminContext';
+import { useLiveSiteInfo } from '../hooks/useLiveData';
 import { saveEnquiry } from '../lib/enquiryService';
 import './HeroSection.css';
 
@@ -19,7 +19,7 @@ const BADGES = [
 function HeroSection() {
   const sectionRef = useRef(null);
   const navigate = useNavigate();
-  const { siteInfo } = useAdmin();
+  const siteInfo = useLiveSiteInfo();
   const [formOpen, setFormOpen] = useState(false);
   const [formData, setFormData] = useState({ name: '', phone: '', interest: '' });
   const [submitted, setSubmitted] = useState(false);
