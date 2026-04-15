@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAdmin } from '../admin/AdminContext';
 import { saveEnquiry } from '../lib/enquiryService';
 import './HeroSection.css';
 
@@ -18,6 +19,7 @@ const BADGES = [
 function HeroSection() {
   const sectionRef = useRef(null);
   const navigate = useNavigate();
+  const { siteInfo } = useAdmin();
   const [formOpen, setFormOpen] = useState(false);
   const [formData, setFormData] = useState({ name: '', phone: '', interest: '' });
   const [submitted, setSubmitted] = useState(false);
@@ -67,8 +69,7 @@ function HeroSection() {
 
         {/* Subtext */}
         <p className="hero__subtext">
-          Premium villas and developments crafted for modern Indian lifestyles —<br className="hero__br" />
-          built with trust, delivered with excellence.
+          {siteInfo.heroSubtext}
         </p>
 
         {/* CTAs */}

@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { getProjectBySlug, PROJECTS } from '../data/projects';
+import { useAdmin } from '../admin/AdminContext';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import './ProjectDetailPage.css';
@@ -7,7 +7,9 @@ import './ProjectDetailPage.css';
 export default function ProjectDetailPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const project = getProjectBySlug(slug);
+  const { projects } = useAdmin();
+  const project = projects.find(p => p.slug === slug);
+  const related = projects.filter(p => p.id !== project?.id && p.category === project?.category).slice(0, 3);
 
   if (!project) {
     return (
@@ -25,10 +27,6 @@ export default function ProjectDetailPage() {
       </>
     );
   }
-
-  const related = PROJECTS.filter(
-    (p) => p.id !== project.id && p.category === project.category
-  ).slice(0, 3);
 
   const scrollToContact = () => {
     navigate('/');

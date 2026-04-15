@@ -1,4 +1,4 @@
-import { AdminProvider, useAdmin } from './AdminContext';
+import { useAdmin } from './AdminContext';
 import AdminLogin from './AdminLogin';
 import AdminDashboard from './AdminDashboard';
 
@@ -8,9 +8,5 @@ function AdminGate() {
 }
 
 export default function AdminPage() {
-  return (
-    <AdminProvider>
-      <AdminGate />
-    </AdminProvider>
-  );
+  return <AdminGate />;
 }

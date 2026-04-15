@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import { useEffect } from 'react'
 import './App.css'
 
+import { AdminProvider } from './admin/AdminContext'
 import useCursorSpotlight from './hooks/useCursorSpotlight'
 import useScrollProgress from './hooks/useScrollProgress'
 import useScrollReveal from './hooks/useScrollReveal'
@@ -28,13 +29,11 @@ function HomePage() {
   useScrollReveal();
   const progress = useScrollProgress();
 
-  // Parallax on hero bg
   useEffect(() => {
     const heroBg = document.querySelector('.hero__bg-img');
     if (!heroBg) return;
     const onScroll = () => {
-      const y = window.scrollY;
-      heroBg.style.transform = `scale(1.05) translateY(${y * 0.25}px)`;
+      heroBg.style.transform = `scale(1.05) translateY(${window.scrollY * 0.25}px)`;
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -42,9 +41,7 @@ function HomePage() {
 
   return (
     <>
-      {/* Scroll progress bar */}
       <div className="scroll-progress" style={{ width: `${progress}%` }} />
-
       <Navbar />
       <main>
         <HeroSection />
@@ -60,17 +57,19 @@ function HomePage() {
       </main>
       <Footer />
     </>
-  )
+  );
 }
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/projects" element={<ProjectsPage />} />
-      <Route path="/projects/:slug" element={<ProjectDetailPage />} />
-      <Route path="/admin" element={<AdminPage />} />
-      <Route path="/admin/*" element={<AdminPage />} />
-    </Routes>
-  )
+    <AdminProvider>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/projects" element={<ProjectsPage />} />
+        <Route path="/projects/:slug" element={<ProjectDetailPage />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin/*" element={<AdminPage />} />
+      </Routes>
+    </AdminProvider>
+  );
 }

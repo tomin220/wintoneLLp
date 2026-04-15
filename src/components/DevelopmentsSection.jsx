@@ -1,10 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import ProjectCard from './ProjectCard';
-import { FEATURED_PROJECTS } from '../data/projects';
+import { useAdmin } from '../admin/AdminContext';
 import './DevelopmentsSection.css';
 
 export default function DevelopmentsSection() {
   const navigate = useNavigate();
+  const { projects } = useAdmin();
+  const featured = projects.filter(p => p.featured);
 
   return (
     <section id="projects" className="developments-section">
@@ -18,7 +20,7 @@ export default function DevelopmentsSection() {
           </p>
         </div>
         <div className="developments-grid reveal-stagger">
-          {FEATURED_PROJECTS.map((project) => (
+          {featured.map((project) => (
             <ProjectCard
               key={project.id}
               image={project.image}
@@ -31,10 +33,7 @@ export default function DevelopmentsSection() {
           ))}
         </div>
         <div className="developments-cta">
-          <button
-            className="btn btn--primary"
-            onClick={() => { navigate('/projects'); window.scrollTo(0, 0); }}
-          >
+          <button className="btn btn--primary" onClick={() => { navigate('/projects'); window.scrollTo(0, 0); }}>
             VIEW ALL PROJECTS
           </button>
         </div>
