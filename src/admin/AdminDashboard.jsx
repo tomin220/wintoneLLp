@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAdmin } from './AdminContext';
+import { fetchEnquiries } from '../lib/enquiryService';
 import AdminOverview from './AdminOverview';
 import AdminProjects from './AdminProjects';
 import AdminSiteInfo from './AdminSiteInfo';
@@ -18,6 +19,13 @@ const NAV = [
 export default function AdminDashboard() {
   const { logout, projects, siteInfo } = useAdmin();
   const [active, setActive] = useState('overview');
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    fetchEnquiries().then(list => {
+      setUnreadCount(list.filter(e => !e.read).length);
+    });
+  }, [active]); // refresh count when switching tabs
 
   return (
     <div className="admin-layout">
@@ -33,9 +41,7 @@ export default function AdminDashboard() {
 
         <nav className="admin-sidebar__nav">
           {NAV.map(item => {
-            const unread = item.id === 'enquiries'
-              ? (() => { try { return JSON.parse(localStorage.getItem('wp_enquiries') || '[]').filter(e => !e.read).length; } catch { return 0; } })()
-              : 0;
+            const badge = item.id === 'enquiries' ? unreadCount : 0;
             return (
               <button
                 key={item.id}
@@ -44,7 +50,7 @@ export default function AdminDashboard() {
               >
                 <span className="admin-nav-item__icon">{item.icon}</span>
                 {item.label}
-                {unread > 0 && <span className="admin-nav-badge">{unread}</span>}
+                {badge > 0 && <span className="admin-nav-badge">{badge}</span>}
               </button>
             );
           })}

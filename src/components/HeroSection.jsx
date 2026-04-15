@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useCounterAnimation from '../hooks/useCounterAnimation';
+import { saveEnquiry } from '../lib/enquiryService';
 import './HeroSection.css';
 
 const scrollToSection = (id) => {
@@ -33,24 +34,16 @@ function HeroSection() {
   const [formData, setFormData] = useState({ name: '', phone: '', interest: '' });
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Save to localStorage for admin inbox
-    const enquiry = {
-      id: Date.now().toString(),
+    await saveEnquiry({
       name: formData.name,
       phone: formData.phone,
       interest: formData.interest,
       email: '',
       message: '',
-      date: new Date().toISOString(),
-      read: false,
       source: 'hero-modal',
-    };
-    try {
-      const existing = JSON.parse(localStorage.getItem('wp_enquiries') || '[]');
-      localStorage.setItem('wp_enquiries', JSON.stringify([enquiry, ...existing]));
-    } catch {}
+    });
     setSubmitted(true);
     setTimeout(() => {
       setFormOpen(false);

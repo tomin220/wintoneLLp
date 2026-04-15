@@ -1,13 +1,15 @@
+import { useState, useEffect } from 'react';
 import { useAdmin } from './AdminContext';
+import { fetchEnquiries } from '../lib/enquiryService';
 import './Admin.css';
 
 export default function AdminOverview() {
   const { projects } = useAdmin();
+  const [enquiries, setEnquiries] = useState([]);
 
-  const enquiries = (() => {
-    try { return JSON.parse(localStorage.getItem('wp_enquiries') || '[]'); }
-    catch { return []; }
-  })();
+  useEffect(() => {
+    fetchEnquiries().then(setEnquiries);
+  }, []);
 
   const completed = projects.filter(p => p.status === 'COMPLETED').length;
   const ongoing = projects.filter(p => p.status === 'ONGOING').length;

@@ -1,21 +1,21 @@
 import { useState, useEffect } from 'react';
+import { fetchEnquiries, markEnquiryRead, deleteEnquiry, markAllRead, deleteAllEnquiries } from '../lib/enquiryService';
 import './Admin.css';
 
-const STORAGE_KEY = 'wp_enquiries';
-
-function loadEnquiries() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
-  catch { return []; }
-}
-
-function saveEnquiries(list) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-}
-
 export default function AdminEnquiries() {
-  const [enquiries, setEnquiries] = useState(loadEnquiries);
+  const [enquiries, setEnquiries] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState(null);
   const [filter, setFilter] = useState('all');
+
+  const load = async () => {
+    setLoading(true);
+    const data = await fetchEnquiries();
+    setEnquiries(data);
+    setLoading(false);
+  };
+
+  useEffect(() => { load(); }, []);
 
   const filtered = enquiries.filter(e => {
     if (filter === 'unread') return !e.read;
@@ -23,63 +23,58 @@ export default function AdminEnquiries() {
     return true;
   });
 
-  const markRead = (id) => {
-    const updated = enquiries.map(e => e.id === id ? { ...e, read: true } : e);
-    setEnquiries(updated);
-    saveEnquiries(updated);
+  const handleSelect = async (e) => {
+    setSelected(e);
+    if (!e.read) {
+      await markEnquiryRead(e.id);
+      setEnquiries(prev => prev.map(x => x.id === e.id ? { ...x, read: true } : x));
+    }
   };
 
-  const deleteEnquiry = (id) => {
-    const updated = enquiries.filter(e => e.id !== id);
-    setEnquiries(updated);
-    saveEnquiries(updated);
+  const handleDelete = async (id) => {
+    await deleteEnquiry(id);
+    setEnquiries(prev => prev.filter(e => e.id !== id));
     if (selected?.id === id) setSelected(null);
   };
 
-  const markAllRead = () => {
-    const updated = enquiries.map(e => ({ ...e, read: true }));
-    setEnquiries(updated);
-    saveEnquiries(updated);
+  const handleMarkAllRead = async () => {
+    await markAllRead();
+    setEnquiries(prev => prev.map(e => ({ ...e, read: true })));
   };
 
-  const clearAll = () => {
-    if (!window.confirm('Delete all enquiries?')) return;
+  const handleClearAll = async () => {
+    if (!window.confirm('Delete all enquiries? This cannot be undone.')) return;
+    await deleteAllEnquiries();
     setEnquiries([]);
-    saveEnquiries([]);
     setSelected(null);
-  };
-
-  const handleSelect = (e) => {
-    setSelected(e);
-    if (!e.read) markRead(e.id);
   };
 
   const unreadCount = enquiries.filter(e => !e.read).length;
 
+  const formatDate = (d) => {
+    if (!d) return '';
+    return new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  };
+
   return (
     <div className="admin-enquiries">
-      {/* Header */}
       <div className="admin-section-header">
         <div>
           <p className="admin-section-count">
-            {enquiries.length} total · {unreadCount} unread
+            {loading ? 'Loading...' : `${enquiries.length} total · ${unreadCount} unread · stored in Supabase`}
           </p>
         </div>
         <div className="admin-section-actions">
+          <button className="admin-btn admin-btn--ghost" onClick={load}>↻ Refresh</button>
           {unreadCount > 0 && (
-            <button className="admin-btn admin-btn--ghost" onClick={markAllRead}>
-              Mark All Read
-            </button>
+            <button className="admin-btn admin-btn--ghost" onClick={handleMarkAllRead}>Mark All Read</button>
           )}
           {enquiries.length > 0 && (
-            <button className="admin-btn admin-btn--ghost" onClick={clearAll}>
-              Clear All
-            </button>
+            <button className="admin-btn admin-btn--ghost" onClick={handleClearAll}>Clear All</button>
           )}
         </div>
       </div>
 
-      {/* Filter tabs */}
       <div className="admin-filter-tabs" style={{ marginBottom: 20 }}>
         {[
           { key: 'all', label: `All (${enquiries.length})` },
@@ -96,7 +91,9 @@ export default function AdminEnquiries() {
         ))}
       </div>
 
-      {filtered.length === 0 ? (
+      {loading ? (
+        <div className="admin-empty">Loading enquiries from Supabase...</div>
+      ) : filtered.length === 0 ? (
         <div className="admin-empty">
           {enquiries.length === 0
             ? 'No enquiries yet. They appear here when visitors submit the contact or enquire form.'
@@ -116,9 +113,7 @@ export default function AdminEnquiries() {
                 <div className="enquiry-item__body">
                   <div className="enquiry-item__top">
                     <span className="enquiry-item__name">{e.name || 'Unknown'}</span>
-                    <span className="enquiry-item__date">
-                      {new Date(e.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
-                    </span>
+                    <span className="enquiry-item__date">{formatDate(e.created_at)}</span>
                   </div>
                   <p className="enquiry-item__preview">{e.interest || 'General Enquiry'} · {e.phone}</p>
                 </div>
@@ -136,7 +131,7 @@ export default function AdminEnquiries() {
                   <div>
                     <h3 className="enquiry-detail__name">{selected.name}</h3>
                     <p className="enquiry-detail__date">
-                      {new Date(selected.date).toLocaleString('en-IN', {
+                      {new Date(selected.created_at).toLocaleString('en-IN', {
                         day: 'numeric', month: 'long', year: 'numeric',
                         hour: '2-digit', minute: '2-digit',
                       })}
@@ -145,7 +140,7 @@ export default function AdminEnquiries() {
                   <button
                     className="admin-action-btn admin-action-btn--delete"
                     style={{ marginLeft: 'auto' }}
-                    onClick={() => deleteEnquiry(selected.id)}
+                    onClick={() => handleDelete(selected.id)}
                   >
                     Delete
                   </button>
@@ -182,7 +177,7 @@ export default function AdminEnquiries() {
                     </a>
                   )}
                   <a
-                    href={`https://wa.me/${selected.phone?.replace(/\D/g, '')}?text=Hello%20${encodeURIComponent(selected.name)}%2C%20thank%20you%20for%20your%20interest%20in%20Winstone%20Projects.`}
+                    href={`https://wa.me/${selected.phone?.replace(/\D/g, '')}?text=Hello%20${encodeURIComponent(selected.name || '')}%2C%20thank%20you%20for%20your%20interest%20in%20Winstone%20Projects.`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="admin-btn admin-btn--ghost"

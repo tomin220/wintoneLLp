@@ -1,24 +1,14 @@
 import { useState } from 'react';
+import { saveEnquiry } from '../lib/enquiryService';
 import './ContactSection.css';
 
 export default function ContactSection() {
   const [form, setForm] = useState({ name: '', phone: '', email: '', interest: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Save to localStorage for admin inbox
-    const enquiry = {
-      id: Date.now().toString(),
-      ...form,
-      date: new Date().toISOString(),
-      read: false,
-      source: 'contact-form',
-    };
-    try {
-      const existing = JSON.parse(localStorage.getItem('wp_enquiries') || '[]');
-      localStorage.setItem('wp_enquiries', JSON.stringify([enquiry, ...existing]));
-    } catch {}
+    await saveEnquiry({ ...form, source: 'contact-form' });
     setSubmitted(true);
   };
 
