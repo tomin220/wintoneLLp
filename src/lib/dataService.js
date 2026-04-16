@@ -1,7 +1,5 @@
 /**
- * dataService — Supabase-first with localStorage fallback.
- * Admin writes here. Website reads from here.
- * Both use the same source so changes are always reflected.
+ * dataService — Supabase as primary store, localStorage as cache.
  */
 import { supabase } from './supabase';
 import { PROJECTS as DEFAULT_PROJECTS } from '../data/projects';
@@ -28,7 +26,6 @@ export const DEFAULT_SITE_INFO = {
   founderBio: "A visionary entrepreneur with a passion for transforming Bangalore's urban landscape. Since founding Winstone Projects in 2018, Nayaz has led the development of premium residential and commercial properties across Bangalore.",
 };
 
-// ── localStorage helpers ──────────────────────────────
 function lsGetProjects() {
   try { const s = localStorage.getItem(LS_KEYS.projects); return s ? JSON.parse(s) : DEFAULT_PROJECTS; }
   catch { return DEFAULT_PROJECTS; }
@@ -53,14 +50,29 @@ export async function fetchProjects() {
   try {
     const { data, error } = await supabase
       .from('projects')
-      .select('data')
+      .select('id, data, updated_at')
       .order('updated_at', { ascending: false });
+
     if (error) throw error;
+
     if (data && data.length > 0) {
-      const projects = data.map(r => r.data);
-      lsSetProjects(projects); // cache locally
-      return projects;
+      // Build map from Supabase
+      const supabaseMap = {};
+      data.forEach(r => { supabaseMap[r.id] = r.data; });
+
+      // Merge with localStorage — localStorage wins for newer items
+      const lsProjects = lsGetProjects();
+      const lsMap = {};
+      lsProjects.forEach(p => { lsMap[p.id] = p; });
+
+      // Union: all Supabase projects + any localStorage-only projects
+      const allIds = new Set([...Object.keys(supabaseMap), ...Object.keys(lsMap)]);
+      const merged = Array.from(allIds).map(id => lsMap[id] || supabaseMap[id]);
+
+      lsSetProjects(merged);
+      return merged;
     }
+
     return lsGetProjects();
   } catch {
     return lsGetProjects();
@@ -68,7 +80,7 @@ export async function fetchProjects() {
 }
 
 export async function saveProject(project) {
-  // Always save to localStorage immediately
+  // 1. Save to localStorage immediately
   const current = lsGetProjects();
   const exists = current.find(p => p.id === project.id);
   const updated = exists
@@ -76,15 +88,17 @@ export async function saveProject(project) {
     : [...current, project];
   lsSetProjects(updated);
 
-  // Try Supabase
-  try {
-    await supabase.from('projects').upsert({
-      id: project.id,
-      slug: project.slug,
-      data: project,
-      updated_at: new Date().toISOString(),
-    });
-  } catch { /* localStorage already updated */ }
+  // 2. Save to Supabase
+  const { error } = await supabase.from('projects').upsert({
+    id: project.id,
+    slug: project.slug,
+    data: project,
+    updated_at: new Date().toISOString(),
+  });
+
+  if (error) {
+    console.error('Supabase saveProject error:', error.message);
+  }
 
   return updated;
 }
@@ -94,21 +108,10 @@ export async function deleteProjectById(id) {
   const updated = current.filter(p => p.id !== id);
   lsSetProjects(updated);
 
-  try { await supabase.from('projects').delete().eq('id', id); }
-  catch { /* localStorage already updated */ }
+  const { error } = await supabase.from('projects').delete().eq('id', id);
+  if (error) console.error('Supabase deleteProject error:', error.message);
 
   return updated;
-}
-
-export async function seedProjectsToSupabase(projects) {
-  // Push default projects to Supabase if table is empty
-  try {
-    const { data } = await supabase.from('projects').select('id').limit(1);
-    if (data && data.length === 0) {
-      const rows = projects.map(p => ({ id: p.id, slug: p.slug, data: p }));
-      await supabase.from('projects').insert(rows);
-    }
-  } catch { /* ignore */ }
 }
 
 // ── Site Config ───────────────────────────────────────
@@ -120,7 +123,9 @@ export async function fetchSiteInfo() {
       .select('value')
       .eq('key', 'siteInfo')
       .single();
+
     if (error) throw error;
+
     if (data?.value) {
       const info = { ...DEFAULT_SITE_INFO, ...data.value };
       lsSetSiteInfo(info);
@@ -135,13 +140,13 @@ export async function fetchSiteInfo() {
 export async function saveSiteInfo(info) {
   lsSetSiteInfo(info);
 
-  try {
-    await supabase.from('site_config').upsert({
-      key: 'siteInfo',
-      value: info,
-      updated_at: new Date().toISOString(),
-    });
-  } catch { /* localStorage already updated */ }
+  const { error } = await supabase.from('site_config').upsert({
+    key: 'siteInfo',
+    value: info,
+    updated_at: new Date().toISOString(),
+  });
+
+  if (error) console.error('Supabase saveSiteInfo error:', error.message);
 
   return info;
 }

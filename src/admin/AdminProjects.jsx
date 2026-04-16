@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAdmin } from './AdminContext';
+import { saveProject } from '../lib/dataService';
 import ProjectForm from './ProjectForm';
 import './Admin.css';
 
@@ -8,10 +9,22 @@ const STATUSES = ['COMPLETED', 'ONGOING'];
 
 export default function AdminProjects() {
   const { projects, deleteProject, resetProjects } = useAdmin();
-  const [view, setView] = useState('list'); // 'list' | 'add' | 'edit'
+  const [view, setView] = useState('list');
   const [editTarget, setEditTarget] = useState(null);
   const [filter, setFilter] = useState('All');
   const [confirmDelete, setConfirmDelete] = useState(null);
+  const [syncing, setSyncing] = useState(false);
+
+  const handleSyncAll = async () => {
+    setSyncing(true);
+    try {
+      for (const p of projects) { await saveProject(p); }
+      alert(`✓ ${projects.length} projects synced to cloud!`);
+    } catch (e) {
+      alert('Sync failed: ' + e.message);
+    }
+    setSyncing(false);
+  };
 
   const filtered = filter === 'All' ? projects : projects.filter(p => p.category === filter);
 
@@ -36,6 +49,9 @@ export default function AdminProjects() {
           <p className="admin-section-count">{projects.length} total projects</p>
         </div>
         <div className="admin-section-actions">
+          <button className="admin-btn admin-btn--ghost" onClick={handleSyncAll} disabled={syncing}>
+            {syncing ? 'Syncing...' : '☁ Sync to Cloud'}
+          </button>
           <button className="admin-btn admin-btn--ghost" onClick={() => {
             if (window.confirm('Reset all projects to default data?')) resetProjects();
           }}>
