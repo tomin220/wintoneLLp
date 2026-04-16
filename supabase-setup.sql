@@ -57,3 +57,17 @@ create policy "Allow public insert config" on public.site_config for insert to a
 create policy "Allow public select config" on public.site_config for select to anon using (true);
 create policy "Allow public update config" on public.site_config for update to anon using (true);
 create policy "Allow public delete config" on public.site_config for delete to anon using (true);
+
+-- 4. STORAGE BUCKET FOR BROCHURES
+-- Run this to create a public bucket for PDF brochures
+insert into storage.buckets (id, name, public)
+values ('brochures', 'brochures', true)
+on conflict (id) do nothing;
+
+-- Allow anyone to upload to brochures bucket
+create policy "Allow public upload brochures" on storage.objects
+  for insert to anon with check (bucket_id = 'brochures');
+
+-- Allow anyone to read brochures
+create policy "Allow public read brochures" on storage.objects
+  for select to anon using (bucket_id = 'brochures');

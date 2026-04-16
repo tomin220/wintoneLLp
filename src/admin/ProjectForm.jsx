@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAdmin } from './AdminContext';
+import PdfUploader from './PdfUploader';
 import './Admin.css';
 
 const CATEGORIES = ['Villa', 'Residential', 'Township', 'Commercial', 'Layout'];
@@ -145,9 +146,15 @@ export default function ProjectForm({ project, onBack }) {
             <input type="text" value={form.tagline} onChange={set('tagline')} placeholder="Where Architecture Meets Nature" />
           </div>
           <div className="admin-field">
-            <label>Brochure PDF URL</label>
-            <input type="url" value={form.brochureUrl || ''} onChange={set('brochureUrl')} placeholder="https://... link to PDF brochure" />
-            <small style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px' }}>Paste a direct link to a PDF (Google Drive, Dropbox, etc.). A "Download Brochure" button will appear on the project page.</small>
+            <label>Brochure PDF</label>
+            <PdfUploader
+              currentUrl={form.brochureUrl || ''}
+              projectId={form.name?.toLowerCase().replace(/\s+/g, '-') || 'project'}
+              onUpload={(url) => setForm(f => ({ ...f, brochureUrl: url }))}
+            />
+            <small style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px', marginTop: 4 }}>
+              Drag & drop a PDF or click to browse. A "Download Brochure" button will appear on the project page.
+            </small>
           </div>
         </div>
 
