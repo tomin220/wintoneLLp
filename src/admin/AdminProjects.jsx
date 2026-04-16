@@ -146,7 +146,7 @@ export default function AdminProjects() {
         <div className="admin-modal-backdrop" onClick={() => setConfirmDelete(null)}>
           <div className="admin-modal" onClick={e => e.stopPropagation()}>
             <h3>Delete Project?</h3>
-            <p>This action cannot be undone.</p>
+            <p>The project will be removed from the website.</p>
             <div className="admin-modal__actions">
               <button className="admin-btn admin-btn--ghost" onClick={() => setConfirmDelete(null)}>Cancel</button>
               <button className="admin-btn admin-btn--danger" onClick={() => handleDelete(confirmDelete)}>Delete</button>
