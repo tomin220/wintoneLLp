@@ -56,39 +56,22 @@ export async function fetchProjects() {
     if (error) throw error;
 
     if (data && data.length > 0) {
-      // Build map from Supabase
-      const supabaseMap = {};
-      data.forEach(r => { supabaseMap[r.id] = r.data; });
-
-      // Merge with localStorage — localStorage wins for newer items
-      const lsProjects = lsGetProjects();
-      const lsMap = {};
-      lsProjects.forEach(p => { lsMap[p.id] = p; });
-
-      // Union: all Supabase projects + any localStorage-only projects
-      const allIds = new Set([...Object.keys(supabaseMap), ...Object.keys(lsMap)]);
-      const merged = Array.from(allIds).map(id => lsMap[id] || supabaseMap[id]);
-
-      lsSetProjects(merged);
-      return merged;
+      // Supabase is the source of truth — use it directly
+      const projects = data.map(r => r.data);
+      lsSetProjects(projects); // update cache
+      return projects;
     }
 
+    // Supabase empty — fall back to localStorage
     return lsGetProjects();
   } catch {
+    // Network error — use localStorage cache
     return lsGetProjects();
   }
 }
 
 export async function saveProject(project) {
-  // 1. Save to localStorage immediately
-  const current = lsGetProjects();
-  const exists = current.find(p => p.id === project.id);
-  const updated = exists
-    ? current.map(p => p.id === project.id ? project : p)
-    : [...current, project];
-  lsSetProjects(updated);
-
-  // 2. Save to Supabase
+  // 1. Save to Supabase first (source of truth)
   const { error } = await supabase.from('projects').upsert({
     id: project.id,
     slug: project.slug,
@@ -99,6 +82,14 @@ export async function saveProject(project) {
   if (error) {
     console.error('Supabase saveProject error:', error.message);
   }
+
+  // 2. Update localStorage cache
+  const current = lsGetProjects();
+  const exists = current.find(p => p.id === project.id);
+  const updated = exists
+    ? current.map(p => p.id === project.id ? project : p)
+    : [...current, project];
+  lsSetProjects(updated);
 
   return updated;
 }
