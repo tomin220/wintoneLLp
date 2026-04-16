@@ -1,8 +1,86 @@
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useLiveProjects } from '../hooks/useLiveData';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import './ProjectDetailPage.css';
+
+function Gallery({ images, projectName }) {
+  const [lightbox, setLightbox] = useState(null); // index of open image
+
+  if (!images || images.length === 0) return null;
+
+  const prev = () => setLightbox(i => (i - 1 + images.length) % images.length);
+  const next = () => setLightbox(i => (i + 1) % images.length);
+
+  return (
+    <section className="detail-section">
+      <h2 className="detail-section__title">Gallery</h2>
+
+      {/* Thumbnail grid — max 4 visible, rest hidden behind "View All" */}
+      <div className="gallery-grid">
+        {images.slice(0, 4).map((src, i) => (
+          <div
+            key={i}
+            className={`gallery-thumb${i === 3 && images.length > 4 ? ' gallery-thumb--more' : ''}`}
+            onClick={() => setLightbox(i)}
+          >
+            <img
+              src={src}
+              alt={`${projectName} — ${i + 1}`}
+              className="gallery-thumb__img"
+              onError={e => { e.currentTarget.src = 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&q=70'; }}
+            />
+            {i === 3 && images.length > 4 && (
+              <div className="gallery-thumb__overlay">
+                <span>+{images.length - 4}</span>
+                <p>View All</p>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {images.length > 4 && (
+        <button className="gallery-view-all" onClick={() => setLightbox(0)}>
+          View All {images.length} Photos →
+        </button>
+      )}
+
+      {/* Lightbox */}
+      {lightbox !== null && (
+        <div className="gallery-lightbox" onClick={() => setLightbox(null)}>
+          <div className="gallery-lightbox__inner" onClick={e => e.stopPropagation()}>
+            <button className="gallery-lightbox__close" onClick={() => setLightbox(null)}>✕</button>
+            <button className="gallery-lightbox__nav gallery-lightbox__nav--prev" onClick={prev}>‹</button>
+            <img
+              key={lightbox}
+              src={images[lightbox]}
+              alt={`${projectName} — ${lightbox + 1}`}
+              className="gallery-lightbox__img"
+              onError={e => { e.currentTarget.src = 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80'; }}
+            />
+            <button className="gallery-lightbox__nav gallery-lightbox__nav--next" onClick={next}>›</button>
+            <div className="gallery-lightbox__counter">{lightbox + 1} / {images.length}</div>
+            {/* Thumbnail strip */}
+            <div className="gallery-lightbox__strip">
+              {images.map((src, i) => (
+                <img
+                  key={i}
+                  src={src}
+                  alt=""
+                  className={`gallery-lightbox__strip-thumb${i === lightbox ? ' active' : ''}`}
+                  onClick={() => setLightbox(i)}
+                  onError={e => { e.currentTarget.style.display = 'none'; }}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
 
 export default function ProjectDetailPage() {
   const { slug } = useParams();
@@ -99,23 +177,12 @@ export default function ProjectDetailPage() {
                 </ul>
               </section>
 
-              {/* Gallery */}
-              {project.gallery && project.gallery.length > 1 && (
-                <section className="detail-section">
-                  <h2 className="detail-section__title">Gallery</h2>
-                  <div className="detail-gallery">
-                    {project.gallery.map((src, i) => (
-                      <div key={i} className="detail-gallery__item">
-                        <img
-                          src={src}
-                          alt={`${project.name} — view ${i + 1}`}
-                          className="detail-gallery__img"
-                          onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80'; }}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </section>
+              {/* Gallery — slideshow with lightbox */}
+              {project.gallery && project.gallery.length > 0 && (
+                <Gallery
+                  images={[project.image, ...project.gallery.filter(u => u && u !== project.image)]}
+                  projectName={project.name}
+                />
               )}
             </div>
 

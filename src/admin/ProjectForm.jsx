@@ -145,6 +145,41 @@ export default function ProjectForm({ project, onBack }) {
             <label>Tagline</label>
             <input type="text" value={form.tagline} onChange={set('tagline')} placeholder="Where Architecture Meets Nature" />
           </div>
+
+          {/* Gallery */}
+          <div className="admin-field">
+            <label>Gallery Images</label>
+            <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', margin: '0 0 10px' }}>
+              Add image URLs for the gallery slideshow on the project page. The main image is always included.
+            </p>
+            {(form.gallery || []).map((url, i) => (
+              <div key={i} className="admin-highlight-row" style={{ marginBottom: 8 }}>
+                <input
+                  type="text"
+                  value={url}
+                  onChange={e => {
+                    const g = [...(form.gallery || [])];
+                    g[i] = e.target.value;
+                    setForm(f => ({ ...f, gallery: g }));
+                  }}
+                  placeholder="https://... image URL"
+                />
+                {url && (
+                  <img src={url} alt="" style={{ width: 48, height: 36, objectFit: 'cover', borderRadius: 3, flexShrink: 0 }}
+                    onError={e => { e.currentTarget.style.display = 'none'; }} />
+                )}
+                <button type="button" className="admin-remove-btn" onClick={() => {
+                  setForm(f => ({ ...f, gallery: (f.gallery || []).filter((_, idx) => idx !== i) }));
+                }}>✕</button>
+              </div>
+            ))}
+            <button type="button" className="admin-btn admin-btn--ghost admin-btn--sm" onClick={() => {
+              setForm(f => ({ ...f, gallery: [...(f.gallery || []), ''] }));
+            }}>
+              + Add Gallery Image
+            </button>
+          </div>
+
           <div className="admin-field">
             <label>Brochure PDF</label>
             <PdfUploader
