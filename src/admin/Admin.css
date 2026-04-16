@@ -993,3 +993,18 @@
 }
 
 .admin-modal--wide { max-width: 560px; }
+
+/* ── Featured toggle button ── */
+.admin-toggle-btn {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 1px;
+  padding: 5px 12px; border-radius: 3px;
+  cursor: pointer; border: 1px solid var(--a-border);
+  background: none; color: var(--a-muted);
+  transition: all 0.18s ease; white-space: nowrap;
+}
+
+.admin-toggle-btn:hover { border-color: var(--a-gold); color: var(--a-gold); }
+.admin-toggle-btn--on { background: rgba(201,168,76,0.1); color: var(--a-gold); border-color: rgba(201,168,76,0.35); }
+.admin-toggle-btn:disabled { opacity: 0.5; cursor: not-allowed; }

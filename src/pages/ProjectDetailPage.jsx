@@ -75,6 +75,16 @@ export default function ProjectDetailPage() {
               <section className="detail-section">
                 <h2 className="detail-section__title">About This Project</h2>
                 <p className="detail-section__text">{project.fullDescription}</p>
+                {project.brochureUrl && (
+                  <a
+                    href={project.brochureUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="detail-brochure-btn"
+                  >
+                    📄 Download Brochure
+                  </a>
+                )}
               </section>
 
               <section className="detail-section">

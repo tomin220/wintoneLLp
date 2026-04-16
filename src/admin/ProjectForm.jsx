@@ -144,6 +144,11 @@ export default function ProjectForm({ project, onBack }) {
             <label>Tagline</label>
             <input type="text" value={form.tagline} onChange={set('tagline')} placeholder="Where Architecture Meets Nature" />
           </div>
+          <div className="admin-field">
+            <label>Brochure PDF URL</label>
+            <input type="url" value={form.brochureUrl || ''} onChange={set('brochureUrl')} placeholder="https://... link to PDF brochure" />
+            <small style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px' }}>Paste a direct link to a PDF (Google Drive, Dropbox, etc.). A "Download Brochure" button will appear on the project page.</small>
+          </div>
         </div>
 
         {/* Descriptions */}
