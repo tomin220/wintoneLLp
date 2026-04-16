@@ -1,94 +1,44 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { PROJECTS as DEFAULT_PROJECTS } from '../data/projects';
-import { LIVE_EVENT, LIVE_KEYS } from '../hooks/useLiveData';
+import {
+  fetchProjects, saveProject, deleteProjectById,
+  fetchSiteInfo, saveSiteInfo, seedProjectsToSupabase,
+  DEFAULT_SITE_INFO,
+} from '../lib/dataService';
 
 const AdminContext = createContext(null);
 
-export const STORAGE_KEYS = {
-  projects: LIVE_KEYS.projects,
-  siteInfo: LIVE_KEYS.siteInfo,
-  auth: 'wp_admin_auth',
-};
-
-export const DEFAULT_SITE_INFO = {
-  companyName: 'Winstone Projects',
-  tagline: 'Redefining luxury living in Bangalore since 2018.',
-  phone: '+91 98450 12345',
-  email: 'info@winstoneprojects.in',
-  address: 'Prestige Tech Park, Outer Ring Road, Bangalore – 560 103',
-  whatsapp: '+919845012345',
-  instagram: 'https://instagram.com/winstoneprojects',
-  twitter: 'https://twitter.com/winstoneprojects',
-  linkedin: 'https://linkedin.com/company/winstoneprojects',
-  heroHeading: 'Where Homes Become Legacies',
-  heroSubtext: 'Premium villas and developments crafted for modern Indian lifestyles — built with trust, delivered with excellence.',
-  founderName: 'Nayaz Faiyaz Ahmed',
-  founderTitle: 'Founder & Chairman · Winstone Group',
-  founderBio: 'A visionary entrepreneur with a passion for transforming Bangalore\'s urban landscape. Since founding Winstone Projects in 2018, Nayaz has led the development of premium residential and commercial properties across Bangalore. His relentless pursuit of excellence, combined with deep respect for Indian architectural heritage, has positioned Winstone Projects as a trusted name in Bangalore\'s luxury real estate sector.',
-};
-
 const ADMIN_CREDENTIALS = { username: 'admin', password: 'winstone2024' };
 
-function readProjects() {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEYS.projects);
-    return stored ? JSON.parse(stored) : DEFAULT_PROJECTS;
-  } catch { return DEFAULT_PROJECTS; }
+// localStorage helpers for instant reads
+function lsGetProjects() {
+  try { const s = localStorage.getItem('wp_admin_projects'); return s ? JSON.parse(s) : DEFAULT_PROJECTS; }
+  catch { return DEFAULT_PROJECTS; }
 }
-
-function readSiteInfo() {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEYS.siteInfo);
-    return stored ? { ...DEFAULT_SITE_INFO, ...JSON.parse(stored) } : DEFAULT_SITE_INFO;
-  } catch { return DEFAULT_SITE_INFO; }
-}
-
-// Fire custom event — works in same tab AND triggers useLiveData listeners
-function notifyChange() {
-  window.dispatchEvent(new CustomEvent(LIVE_EVENT));
+function lsGetSiteInfo() {
+  try { const s = localStorage.getItem('wp_admin_siteinfo'); return s ? { ...DEFAULT_SITE_INFO, ...JSON.parse(s) } : DEFAULT_SITE_INFO; }
+  catch { return DEFAULT_SITE_INFO; }
 }
 
 export function AdminProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(
-    () => localStorage.getItem(STORAGE_KEYS.auth) === 'true'
+    () => localStorage.getItem('wp_admin_auth') === 'true'
   );
-  const [projects, setProjects] = useState(readProjects);
-  const [siteInfo, setSiteInfo] = useState(readSiteInfo);
+  // Initialize from localStorage immediately (no flicker)
+  const [projects, setProjects] = useState(lsGetProjects);
+  const [siteInfo, setSiteInfo] = useState(lsGetSiteInfo);
 
-  // Re-read from localStorage on every focus (handles tab switching and navigation)
+  // On mount: fetch from Supabase and seed if needed
   useEffect(() => {
-    const onFocus = () => {
-      setProjects(readProjects());
-      setSiteInfo(readSiteInfo());
-    };
-    window.addEventListener('focus', onFocus);
-    return () => window.removeEventListener('focus', onFocus);
-  }, []);
-
-  // Listen for storage changes (cross-tab AND same-tab via notifyChange)
-  useEffect(() => {
-    const onStorage = (e) => {
-      if (!e.key || e.key === STORAGE_KEYS.projects) setProjects(readProjects());
-      if (!e.key || e.key === STORAGE_KEYS.siteInfo) setSiteInfo(readSiteInfo());
-    };
-    window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
-  }, []);
-
-  const persistProjects = useCallback((updated) => {
-    localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(updated));
-    notifyChange();
-  }, []);
-
-  const persistSiteInfo = useCallback((updated) => {
-    localStorage.setItem(STORAGE_KEYS.siteInfo, JSON.stringify(updated));
-    notifyChange();
+    seedProjectsToSupabase(DEFAULT_PROJECTS);
+    fetchProjects().then(data => { if (data?.length) setProjects(data); });
+    fetchSiteInfo().then(data => { if (data) setSiteInfo(data); });
   }, []);
 
   const login = (username, password) => {
     if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
       setIsAuthenticated(true);
-      localStorage.setItem(STORAGE_KEYS.auth, 'true');
+      localStorage.setItem('wp_admin_auth', 'true');
       return true;
     }
     return false;
@@ -96,10 +46,10 @@ export function AdminProvider({ children }) {
 
   const logout = () => {
     setIsAuthenticated(false);
-    localStorage.removeItem(STORAGE_KEYS.auth);
+    localStorage.removeItem('wp_admin_auth');
   };
 
-  const addProject = (project) => {
+  const addProject = async (project) => {
     const slug = project.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
     const newProject = {
       ...project,
@@ -107,34 +57,44 @@ export function AdminProvider({ children }) {
       slug,
       gallery: project.image ? [project.image] : [],
     };
-    const updated = [...projects, newProject];
+    const updated = await saveProject(newProject);
     setProjects(updated);
-    persistProjects(updated);
+    window.dispatchEvent(new CustomEvent('wp-data-changed'));
     return newProject;
   };
 
-  const updateProject = (id, updates) => {
-    const updated = projects.map(p => p.id === id ? { ...p, ...updates } : p);
+  const updateProject = async (id, updates) => {
+    const current = lsGetProjects();
+    const project = current.find(p => p.id === id);
+    if (!project) return;
+    const updated = await saveProject({ ...project, ...updates });
     setProjects(updated);
-    persistProjects(updated);
+    window.dispatchEvent(new CustomEvent('wp-data-changed'));
   };
 
-  const deleteProject = (id) => {
-    const updated = projects.filter(p => p.id !== id);
+  const deleteProject = async (id) => {
+    const updated = await deleteProjectById(id);
     setProjects(updated);
-    persistProjects(updated);
+    window.dispatchEvent(new CustomEvent('wp-data-changed'));
   };
 
-  const updateSiteInfo = (updates) => {
+  const updateSiteInfo = async (updates) => {
     const updated = { ...siteInfo, ...updates };
+    await saveSiteInfo(updated);
     setSiteInfo(updated);
-    persistSiteInfo(updated);
+    window.dispatchEvent(new CustomEvent('wp-data-changed'));
   };
 
-  const resetProjects = () => {
+  const resetProjects = async () => {
+    localStorage.setItem('wp_admin_projects', JSON.stringify(DEFAULT_PROJECTS));
     setProjects(DEFAULT_PROJECTS);
-    localStorage.removeItem(STORAGE_KEYS.projects);
-    notifyChange();
+    // Re-seed Supabase
+    try {
+      const rows = DEFAULT_PROJECTS.map(p => ({ id: p.id, slug: p.slug, data: p }));
+      await import('../lib/supabase').then(({ supabase }) =>
+        supabase.from('projects').upsert(rows)
+      );
+    } catch { /* ignore */ }
   };
 
   return (
