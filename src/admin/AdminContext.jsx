@@ -44,7 +44,12 @@ function readSiteInfo() {
 
 // Dispatch a custom event so same-tab listeners pick up changes
 function notifyChange(key) {
-  window.dispatchEvent(new StorageEvent('storage', { key }));
+  // Use both StorageEvent and a custom event for maximum compatibility
+  try {
+    window.dispatchEvent(new StorageEvent('storage', { key, newValue: localStorage.getItem(key) }));
+  } catch {
+    window.dispatchEvent(new Event('storage'));
+  }
 }
 
 export function AdminProvider({ children }) {
