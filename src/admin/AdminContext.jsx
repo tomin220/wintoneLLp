@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import { PROJECTS as DEFAULT_PROJECTS } from '../data/projects';
 import {
   fetchProjects, saveProject, deleteProjectById,
-  fetchSiteInfo, saveSiteInfo, seedProjectsToSupabase,
+  fetchSiteInfo, saveSiteInfo,
   DEFAULT_SITE_INFO,
 } from '../lib/dataService';
 
@@ -28,9 +28,8 @@ export function AdminProvider({ children }) {
   const [projects, setProjects] = useState(lsGetProjects);
   const [siteInfo, setSiteInfo] = useState(lsGetSiteInfo);
 
-  // On mount: fetch from Supabase and seed if needed
+  // On mount: fetch from Supabase
   useEffect(() => {
-    seedProjectsToSupabase(DEFAULT_PROJECTS);
     fetchProjects().then(data => { if (data?.length) setProjects(data); });
     fetchSiteInfo().then(data => { if (data) setSiteInfo(data); });
   }, []);

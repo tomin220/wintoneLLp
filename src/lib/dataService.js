@@ -54,14 +54,13 @@ export async function fetchProjects() {
     const { data, error } = await supabase
       .from('projects')
       .select('data')
-      .order('data->year', { ascending: false });
+      .order('updated_at', { ascending: false });
     if (error) throw error;
     if (data && data.length > 0) {
       const projects = data.map(r => r.data);
       lsSetProjects(projects); // cache locally
       return projects;
     }
-    // Supabase empty — return localStorage (may have been seeded)
     return lsGetProjects();
   } catch {
     return lsGetProjects();
