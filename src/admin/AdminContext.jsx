@@ -1,11 +1,12 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { PROJECTS as DEFAULT_PROJECTS } from '../data/projects';
+import { LIVE_EVENT, LIVE_KEYS } from '../hooks/useLiveData';
 
 const AdminContext = createContext(null);
 
 export const STORAGE_KEYS = {
-  projects: 'wp_admin_projects',
-  siteInfo: 'wp_admin_siteinfo',
+  projects: LIVE_KEYS.projects,
+  siteInfo: LIVE_KEYS.siteInfo,
   auth: 'wp_admin_auth',
 };
 
@@ -42,14 +43,9 @@ function readSiteInfo() {
   } catch { return DEFAULT_SITE_INFO; }
 }
 
-// Dispatch a custom event so same-tab listeners pick up changes
-function notifyChange(key) {
-  // Use both StorageEvent and a custom event for maximum compatibility
-  try {
-    window.dispatchEvent(new StorageEvent('storage', { key, newValue: localStorage.getItem(key) }));
-  } catch {
-    window.dispatchEvent(new Event('storage'));
-  }
+// Fire custom event — works in same tab AND triggers useLiveData listeners
+function notifyChange() {
+  window.dispatchEvent(new CustomEvent(LIVE_EVENT));
 }
 
 export function AdminProvider({ children }) {
@@ -79,16 +75,14 @@ export function AdminProvider({ children }) {
     return () => window.removeEventListener('storage', onStorage);
   }, []);
 
-  // Persist projects and notify
   const persistProjects = useCallback((updated) => {
     localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(updated));
-    notifyChange(STORAGE_KEYS.projects);
+    notifyChange();
   }, []);
 
-  // Persist siteInfo and notify
   const persistSiteInfo = useCallback((updated) => {
     localStorage.setItem(STORAGE_KEYS.siteInfo, JSON.stringify(updated));
-    notifyChange(STORAGE_KEYS.siteInfo);
+    notifyChange();
   }, []);
 
   const login = (username, password) => {
@@ -140,7 +134,7 @@ export function AdminProvider({ children }) {
   const resetProjects = () => {
     setProjects(DEFAULT_PROJECTS);
     localStorage.removeItem(STORAGE_KEYS.projects);
-    notifyChange(STORAGE_KEYS.projects);
+    notifyChange();
   };
 
   return (
