@@ -16,6 +16,7 @@ import DevelopmentsSection from './components/DevelopmentsSection'
 import PortfolioSection from './components/PortfolioSection'
 import WhyChooseSection from './components/WhyChooseSection'
 import FounderSection from './components/FounderSection'
+import AwardsSection from './components/AwardsSection'
 import CTABanner from './components/CTABanner'
 import ContactSection from './components/ContactSection'
 import Footer from './components/Footer'
@@ -52,6 +53,7 @@ function HomePage() {
         <PortfolioSection />
         <WhyChooseSection />
         <FounderSection />
+        <AwardsSection />
         <CTABanner />
         <ContactSection />
       </main>
