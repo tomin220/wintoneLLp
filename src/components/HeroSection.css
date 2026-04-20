@@ -102,17 +102,32 @@
   font-family: var(--font-heading);
   font-size: clamp(2.8rem, 5vw, 4.6rem);
   font-weight: 500;
-  color: #fff;
   line-height: 1.05;
   margin-bottom: 20px;
   letter-spacing: -0.035em;
+  /* Warm off-white gradient — not flat white */
+  background: linear-gradient(
+    160deg,
+    #ffffff 0%,
+    rgba(245, 238, 222, 0.96) 45%,
+    rgba(228, 212, 180, 0.92) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 28px rgba(201, 168, 76, 0.12));
 }
 
 .hero__heading em {
   font-style: italic;
-  color: var(--color-gold);
   display: block;
-  text-shadow: 0 0 80px rgba(201,168,76,0.3);
+  background: linear-gradient(135deg, #e8c96a 0%, #c9a84c 35%, #f2d878 65%, #c9a84c 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 3s linear infinite;
+  filter: drop-shadow(0 0 36px rgba(201, 168, 76, 0.45));
 }
 
 /* Rule */
