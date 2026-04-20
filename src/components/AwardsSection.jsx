@@ -64,7 +64,7 @@ export default function AwardsSection() {
       <div className="container">
         <div className="awards-grid reveal-stagger">
           {AWARDS.map((award) => (
-            <article key={award.year} className="award-card">
+            <article key={award.year} className="award-card border-beam">
               <div className="award-card__top">
                 <div className="award-card__trophy" aria-hidden="true">🏆</div>
                 <span className="award-card__year">{award.year}</span>

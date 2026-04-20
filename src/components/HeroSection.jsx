@@ -2,6 +2,8 @@ import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLiveSiteInfo } from '../hooks/useLiveData';
 import { saveEnquiry } from '../lib/enquiryService';
+import useMagneticEffect from '../hooks/useMagneticEffect';
+import SplitText from './SplitText';
 import './HeroSection.css';
 
 const scrollToSection = (id) => {
@@ -23,6 +25,8 @@ function HeroSection() {
   const [formOpen, setFormOpen] = useState(false);
   const [formData, setFormData] = useState({ name: '', phone: '', interest: '' });
   const [submitted, setSubmitted] = useState(false);
+  const btnPrimaryRef = useMagneticEffect(0.4, 90);
+  const btnGhostRef = useMagneticEffect(0.4, 90);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,7 +47,7 @@ function HeroSection() {
   };
 
   return (
-    <section id="hero" className="hero" ref={sectionRef}>
+    <section id="hero" className="hero noise-overlay" ref={sectionRef}>
 
       {/* ── Full-bleed background ── */}
       <div className="hero__bg-img" />
@@ -58,11 +62,13 @@ function HeroSection() {
           BANGALORE, INDIA · EST. 2018
         </div>
 
-        {/* Heading */}
-        <h1 className="hero__heading">
-          Where Homes<br />
-          Become <em>Legacies</em>
-        </h1>
+        {/* Heading — split text blur-in */}
+        <SplitText
+          text="Where Homes Become Legacies"
+          tag="h1"
+          className="hero__heading"
+          delay={200}
+        />
 
         {/* Thin gold rule */}
         <div className="hero__rule" />
@@ -72,15 +78,20 @@ function HeroSection() {
           {siteInfo.heroSubtext}
         </p>
 
-        {/* CTAs */}
+        {/* CTAs — magnetic */}
         <div className="hero__cta-group">
           <button
-            className="btn btn--primary"
+            ref={btnPrimaryRef}
+            className="btn btn--primary magnetic"
             onClick={() => { navigate('/projects'); window.scrollTo(0, 0); }}
           >
             Explore Projects
           </button>
-          <button className="btn btn--ghost" onClick={() => setFormOpen(true)}>
+          <button
+            ref={btnGhostRef}
+            className="btn btn--ghost magnetic"
+            onClick={() => setFormOpen(true)}
+          >
             Enquire Now
           </button>
         </div>
@@ -98,7 +109,7 @@ function HeroSection() {
       </div>
 
       {/* Floating property card — bottom right */}
-      <div className="hero__float-card">
+      <div className="hero__float-card float-anim">
         <div className="hero__float-card-dot" />
         <div>
           <p className="hero__float-card-title">Arcadia Villas</p>

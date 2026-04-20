@@ -6,6 +6,7 @@ import { AdminProvider } from './admin/AdminContext'
 import useCursorSpotlight from './hooks/useCursorSpotlight'
 import useScrollProgress from './hooks/useScrollProgress'
 import useScrollReveal from './hooks/useScrollReveal'
+import { useMagneticButtons, useSplitText, useShimmerLabels, useBorderBeam, usePageTransition } from './hooks/useReactBits'
 
 import Navbar from './components/Navbar'
 import HeroSection from './components/HeroSection'
@@ -28,6 +29,11 @@ import AdminPage from './admin/AdminPage'
 function HomePage() {
   useCursorSpotlight();
   useScrollReveal();
+  useMagneticButtons();
+  useSplitText();
+  useShimmerLabels();
+  useBorderBeam();
+  usePageTransition();
   const progress = useScrollProgress();
 
   useEffect(() => {

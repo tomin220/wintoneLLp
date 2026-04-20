@@ -46,6 +46,19 @@
   text-transform: uppercase;
   color: var(--color-gold);
   margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Auto-shimmer on all section labels */
+.section-label::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  animation: shimmerSlide 4s ease-in-out infinite;
+  pointer-events: none;
 }
 
 .section-label::before {

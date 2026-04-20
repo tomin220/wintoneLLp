@@ -21,7 +21,7 @@ function resetTilt(e) {
 export default function ProjectCard({ image, name, type, location, description, onClick }) {
   return (
     <article
-      className={`project-card tilt-card${onClick ? ' project-card--clickable' : ''}`}
+      className={`project-card tilt-card glow-card${onClick ? ' project-card--clickable' : ''}`}
       onClick={onClick}
       onMouseMove={handleTilt}
       onMouseLeave={resetTilt}
