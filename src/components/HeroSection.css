@@ -102,20 +102,29 @@
   font-family: var(--font-heading);
   font-size: clamp(2.8rem, 5vw, 4.6rem);
   font-weight: 500;
-  line-height: 1.05;
+  line-height: 1.1;
   margin-bottom: 20px;
   letter-spacing: -0.035em;
-  /* Warm off-white gradient — not flat white */
+  filter: drop-shadow(0 4px 40px rgba(201, 168, 76, 0.22));
+}
+
+/* Each split word gets a rich gold-to-cream gradient */
+.hero__heading .split-word {
+  display: inline-block;
   background: linear-gradient(
     160deg,
-    #ffffff 0%,
-    rgba(245, 238, 222, 0.96) 45%,
-    rgba(228, 212, 180, 0.92) 100%
+    #f5e6c0 0%,
+    #e8c96a 28%,
+    #fff8ec 55%,
+    #c9a84c 80%,
+    #f2d878 100%
   );
+  background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 2px 28px rgba(201, 168, 76, 0.12));
+  animation: wordReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+             gradientShift 5s linear infinite;
 }
 
 .hero__heading em {
